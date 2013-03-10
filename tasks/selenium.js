@@ -128,6 +128,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('selenium', 'Run selenium', function( data ) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
+          browsers: ['firefox']
         }),
         done = this.async(),
         child,
