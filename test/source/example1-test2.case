@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>assertText</td>
+	<td>css=h3</td>
+	<td>*Text Animation*</td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=plugins</td>
 	<td></td>

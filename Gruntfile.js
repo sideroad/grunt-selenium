@@ -17,7 +17,7 @@ module.exports = function(grunt) {
     selenium: {
       options: {
         startURL : 'http://sideroad.secret.jp/',
-        browsers: ['firefox', 'safari']
+        browsers: ['firefox', 'chrome']
       },
       suite: {
         files: {

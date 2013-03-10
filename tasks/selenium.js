@@ -43,8 +43,10 @@ module.exports = function(grunt) {
           }
         },
         equal: function(cmd, actual, expected, msg){
+          var pattern = new RegExp("^"+(expected.replace(/(\.|\[|\]|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
           grunt.log.debug( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
-          if(actual !== expected) {
+
+          if(!pattern.test(actual)) {
             grunt.log.error('['+cmd+'] was failed '+msg+'\n'+
                             '  actual  :'+actual+'\n'+
                             '  expected:'+expected);
@@ -72,6 +74,13 @@ module.exports = function(grunt) {
             return util.location(target);
           }).then(function(el){
             assert.ok('assertElementPresent', el, '['+target+']'+msg );
+          });
+        },
+        assertLocation: function( expected, msg ){
+          return this.then(function(){
+            return browser.execute('window.location.href');
+          }).then(function( href ){
+            assert.equal('assertLocation', href, expected, msg );
           });
         },
         assertText: function( target, expected, msg ){
@@ -110,6 +119,8 @@ module.exports = function(grunt) {
             return util.location(target);
           }).then(function( el ){
             return browser.clickElement(el);
+          }).then(function(){
+            return browser.waitForCondition('window.document.readyState==="complete"');
           });
         },
         deleteCookie: function( name ){
