@@ -21,7 +21,7 @@ module.exports = function(grunt) {
       },
       suite: {
         files: {
-          'example': ['test/source/*.suite']
+         'example': ['test/source/*.suite']
         }
       }
     }

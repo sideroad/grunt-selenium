@@ -24,14 +24,34 @@ module.exports = function(grunt) {
         camelize: function(str){
           return str.substr(0,1).toUpperCase() + str.substr(1);
         },
+        // location : function(target){
+        //   var type = this.camelize( target.split('=')[0] ),
+        //       value = target.split('=')[1],
+        //       el;
+        //   type = ( type === 'Link' ) ? 'LinkText' : type;
+        //   grunt.log.debug('location: elementBy'+type + ' ' + target );
+        //   el = browser['elementBy' + type ].call(browser, value);
+        //   return el;
+        // },
+        elementBy: function(target){
+          var location = this.location(target);
+          grunt.log.debug('elementBy: ' + target );
+          return browser.element( location.type, location.value );
+        },
+        waitForElement: function(target){
+          var location = this.location(target);
+          grunt.log.debug('waitForElement: ' + target );
+          return browser.waitForElement( location.type, location.value );
+        },
         location : function(target){
-          var type = this.camelize( target.split('=')[0] ),
+          var type = target.split('=')[0],
               value = target.split('=')[1],
               el;
-          type = ( type === 'Link' ) ? 'LinkText' : type;
-          grunt.log.debug('location: elementBy'+type + ' ' + target );
-          el = browser['elementBy' + type ].call(browser, value);
-          return el;
+          type = {
+            'css': 'css selector',
+            'link': 'link text'
+          }[type] || type;
+          return {type: type, value: value};
         }
       },
       assert = {
@@ -54,24 +74,18 @@ module.exports = function(grunt) {
           }
         }
       },
-      simplifies = {
-        'open' : 'get',
-        'deleteCookie': 'deleteCookie',
-        'goBack': 'back',
-        'goBackAndWait': 'back'
-      },
       cmd = {
         /*
          * Commands passed target, value arguments 
-         */
-        open: function( url ){
+         */ 
+        open: function(target){
           return this.then(function(){
-            return browser.get( url );
+            return browser.get(target);
           });
         },
         assertElementPresent: function( target, msg ){
           return this.then(function(){
-            return util.location(target);
+            return util.elementBy(target);
           }).then(function(el){
             assert.ok('assertElementPresent', el, '['+target+']'+msg );
           });
@@ -85,7 +99,7 @@ module.exports = function(grunt) {
         },
         assertText: function( target, expected, msg ){
           return this.then(function(){
-            return util.location(target);
+            return util.elementBy(target);
           }).then(function(el){
             return el.text();
           }).then(function(text){
@@ -104,27 +118,37 @@ module.exports = function(grunt) {
             return browser.title();
           }).then(function(title){
             assert.equal( 'assertTitle', title, expected, msg );
-            return this;
+            return browser.title();
           });
         },
         click: function( target ){
           return this.then(function(){
-            return util.location(target);
+            return util.elementBy(target);
           }).then(function( el ){
             return browser.clickElement(el);
           });
         },
         clickAndWait: function( target ){
           return this.then(function(){
-            return util.location(target);
+            return util.elementBy(target);
           }).then(function( el ){
             return browser.clickElement(el);
-          }).then(function(){
-            return browser.waitForCondition('window.document.readyState==="complete"');
           });
         },
         deleteCookie: function( name ){
-          return browser.deleteCookie(name);
+          return this.then(function(){
+            return browser.deleteCookie(name);
+          });
+        },
+        goBack: function(){
+          return this.then(function(){
+            return browser.back();
+          });
+        },
+        goBackAndWait: function(){
+          return this.then(function(){
+            return browser.back();
+          });
         },
         storeEval: function( script, name ){
           return this.then(function(){
@@ -132,6 +156,27 @@ module.exports = function(grunt) {
           }).then(function( result ){
             store[name] = result;
             return this;
+          });
+        },
+        type: function( target, keys ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function( el ){
+            return browser.type(el, keys);
+          });
+        },
+        verifyText: function( target, expected, msg ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.text();
+          }).then(function(text){
+            assert.equal('verifyText', text, expected, '['+target+']'+msg );
+          });
+        },
+        waitForElementPresent: function(target){
+          return this.then(function(){
+            return util.waitForElement(target);
           });
         }
       };
@@ -155,102 +200,94 @@ module.exports = function(grunt) {
     child.stdout.on('data', function(data){
       data = (''+data).replace(/\n$/,'');
       grunt.log.debug(data);
-      if( data.match('Started org.openqa.jetty.jetty.Server') ){
-        var wd = require('wd'),
-            promise;
-        async.mapSeries( options.browsers, function(browserName, callback){
-          grunt.log.writeln('Setup browser ['+browserName+']');
-          browser = wd.promiseRemote();
-          promise = browser.init({
-            browserName: browserName,
-            name: 'This is an example test'
+      if( !data.match('Started org.openqa.jetty.jetty.Server') ) {
+        return;
+      }
+      var wd = require('wd'),
+          promise;
+
+      async.mapSeries( options.browsers, function(browserName, callback){
+        grunt.log.writeln('Setup browser ['+browserName+']');
+        browser = wd.promiseRemote();
+        promise = browser.init({
+          browserName: browserName,
+          name: 'This is an example test'
+        });
+        that.files.forEach(function(f) {
+          var suites = f.src.filter(function(filepath) {
+            // Warn on and remove invalid source files (if nonull was set).
+            if (!grunt.file.exists(filepath)) {
+              grunt.log.warn('Source file "' + filepath + '" not found.');
+              return false;
+            } else {
+              return true;
+            }
           });
-          that.files.forEach(function(f) {
-            var suites = f.src.filter(function(filepath) {
-              // Warn on and remove invalid source files (if nonull was set).
-              if (!grunt.file.exists(filepath)) {
-                grunt.log.warn('Source file "' + filepath + '" not found.');
-                return false;
-              } else {
-                return true;
+
+          async.mapSeries( suites, function( suite, callback ){
+            grunt.log.writeln('  Running suite['+suite+']');
+
+            jsdom.env({
+              html: suite,
+              src: [jquery],
+              done: function(errors, window){
+                var $ = window.$,
+                    hrefs = [];
+
+                $('a[href]').each(function(){
+                  hrefs.push(this.href);
+                });
+                async.map( hrefs, function( href, callback ){
+                  jsdom.env({
+                    html: fs.readFileSync( href, 'utf8').toString(),
+                    src: [jquery],
+                    done: function(errors, window){
+                      var $ = window.$,
+                          testcase = $('thead tr td').html();
+                      promise = promise.then(function(){
+                        grunt.log.writeln( '    Running test case['+testcase+']' );
+                      });
+                      $('tbody').find('tr').each(function(){
+                        var $tr = $(this),
+                            command = $tr.find('td:eq(0)').html(),
+                            target = $tr.find('td:eq(1)').html(),
+                            value = $tr.find('td:eq(2)').html();
+                        promise = ( 
+                          cmd[command]||
+                          function( target, value ){
+                            grunt.log.warn('Command not supported['+command+']');
+                            return this;
+                          }
+                        ).apply( promise, [ target, value ] );
+                      });
+                      promise = promise.then(function(){
+                        grunt.log.writeln('    Finish  test case['+testcase+']');
+                        callback(promise);
+                      });
+                    }
+                  });
+                }, function( err, results ){
+                  promise = promise.then(function(){
+                    store = {};
+                    grunt.log.writeln('  Finish suite['+suite+']');
+                    callback();
+                  });
+                });
               }
             });
-
-            async.mapSeries( suites, function( suite, callback ){
-              grunt.log.writeln('  Running suite['+suite+']');
-
-              jsdom.env({
-                html: suite,
-                src: [jquery],
-                done: function(errors, window){
-                  var $ = window.$,
-                      hrefs = [];
-
-                  $('a[href]').each(function(){
-                    hrefs.push(this.href);
-                  });
-                  async.map( hrefs, function( href, callback ){
-                    jsdom.env({
-                      html: fs.readFileSync( href, 'utf8').toString(),
-                      src: [jquery],
-                      done: function(errors, window){
-                        var $ = window.$,
-                            testcase = $('thead tr td').html();
-                        promise = promise.then(function(){
-                          grunt.log.writeln( '    Running test case['+testcase+']' );
-                        });
-                        $('tbody tr').each(function(){
-                          var $tr = $(this),
-                              command = $tr.find('td:eq(0)').html(),
-                              target = $tr.find('td:eq(1)').html(),
-                              value = $tr.find('td:eq(2)').html();
-                          promise = ( 
-                            cmd[command]||
-                            function( target, value ){
-                              var simplify = simplifies[command];
-                              if( simplify ){
-                                return this.then(function(){
-                                  return browser.back();
-                                  // return browser[simplify].apply(browser, [target, value]);
-                                });
-                              } else {
-                                grunt.log.warn('Command not supported['+command+']');
-                                return this;
-                              }
-                            }
-                          ).apply( promise, [ target, value ] );
-                        });
-                        promise = promise.then(function(){
-                          grunt.log.writeln('    Finish  test case['+testcase+']');
-                          callback();
-                        });
-                        
-                      }
-                    });
-                  }, function( err, results ){
-                    promise = promise.then(function(){
-                      store = {};
-                      grunt.log.writeln('  Finish suite['+suite+']');
-                      callback();
-                    });
-                  });
-                }
-              });
-            }, function(){
-              promise = promise.then(function(){
-                grunt.log.writeln('Teardown browser ['+browserName+']');
-                return browser.quit();
-              }).fin(function(){
-                callback();
-              }).done();
-            });
+          }, function(){
+            promise = promise.then(function(){
+              grunt.log.writeln('Teardown browser ['+browserName+']');
+              return browser.quit();
+            }).fin(function(){
+              callback();
+            }).done();
           });
-        }, function(){          
-          child.kill();
-          done(isSuccess);
         });
-      }
+      }, function(){          
+        child.kill();
+        done(isSuccess);
+      });
     });
   });
-
 };
