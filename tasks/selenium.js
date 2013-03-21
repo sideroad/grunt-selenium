@@ -20,6 +20,7 @@ module.exports = function(grunt) {
       browser,
       isSuccess = true,
       store = {},
+      timeout,
       util = {
         camelize: function(str){
           return str.substr(0,1).toUpperCase() + str.substr(1);
@@ -41,11 +42,12 @@ module.exports = function(grunt) {
         waitForElement: function(target){
           var location = this.location(target);
           grunt.log.debug('waitForElement: ' + target );
-          return browser.waitForElement( location.type, location.value );
+          return browser.waitForElement( location.type, location.value, timeout );
         },
         location : function(target){
-          var type = target.split('=')[0],
-              value = target.split('=')[1],
+          var split = target.split('='),
+              type = split.shift(),
+              value = split.join('=').replace(/\&amp;/g,'&'),
               el;
           type = {
             'css': 'css selector',
@@ -184,7 +186,8 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('selenium', 'Run selenium', function( data ) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-          browsers: ['firefox']
+          browsers: ['firefox'],
+          timeout: 10000
         }),
         done = this.async(),
         child,
@@ -213,6 +216,7 @@ module.exports = function(grunt) {
           browserName: browserName,
           name: 'This is an example test'
         });
+        timeout = options.timeout;
         that.files.forEach(function(f) {
           var suites = f.src.filter(function(filepath) {
             // Warn on and remove invalid source files (if nonull was set).
