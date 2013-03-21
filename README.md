@@ -45,6 +45,23 @@ Default value: `[ 'firefox' ]`
 
 Array value that is used to testing browsers.
 
+### Supported commands
+-open
+-assertElementPresent
+-assertLocation
+-assertText
+-assertTextPresent
+-assertTitle
+-click
+-clickAndWait
+-deleteCookie
+-goBack
+-goBackAndWait
+-storeEval
+-type
+-verifyText
+-waitForElementPresent
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
