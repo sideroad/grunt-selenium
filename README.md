@@ -1,6 +1,8 @@
 # grunt-selenium
 
-> Run Selenium WebDriver using HTML Suite
+> Selenium IDE can debug easily more than WebDriver.
+> WebDriver can test on browsers not only Firefox and detect browser depended bugs.
+> This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -45,7 +47,7 @@ Default value: `[ 'firefox' ]`
 
 Array value that is used to testing browsers.
 
-### Supported commands
+## Supported commands
   - open
   - assertElementPresent
   - assertLocation
@@ -57,11 +59,13 @@ Array value that is used to testing browsers.
   - deleteCookie
   - goBack
   - goBackAndWait
+  - store
   - storeEval
+  - storeText
   - type
   - verifyText
   - waitForElementPresent
-  
- ## Contributing
+
+## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 

@@ -10,8 +10,7 @@
 
 module.exports = function(grunt) {
   var async = require('async'),
-      exec = require('child_process').exec,
-      spawn = require('child_process').spawn,
+      spawn = require('simple-spawn').spawn,
       jsdom = require('jsdom'),
       path = require('path'),
       fs = require('fs'),
@@ -19,7 +18,7 @@ module.exports = function(grunt) {
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.31.0.jar',
       browser,
       isSuccess = true,
-      store = {},
+      storedVars = {},
       timeout,
       util = {
         camelize: function(str){
@@ -65,7 +64,11 @@ module.exports = function(grunt) {
           }
         },
         equal: function(cmd, actual, expected, msg){
+          expected = expected.replace(/\$\{([^\}]+)\}/g, function(whole, name){
+            return storedVars[name];
+          });
           var pattern = new RegExp("^"+(expected.replace(/(\.|\[|\]|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
+
           grunt.log.debug( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
           if(!pattern.test(actual)) {
@@ -152,12 +155,25 @@ module.exports = function(grunt) {
             return browser.back();
           });
         },
+        store: function( value , name ){
+          storedVars[name] = value;
+          return this;
+        },
         storeEval: function( script, name ){
           return this.then(function(){
             return browser.execute( script );
           }).then(function( result ){
-            store[name] = result;
+            storedVars[name] = result;
             return this;
+          });
+        },
+        storeText: function( target, name ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.text();
+          }).then(function(text){
+            storedVars[name] = text;
           });
         },
         type: function( target, keys ){
@@ -181,8 +197,14 @@ module.exports = function(grunt) {
             return util.waitForElement(target);
           });
         }
-      };
+      },
+      key,
+      supportedCmds = [];
 
+  for(key in cmd){
+    supportedCmds.push(key);
+  }
+  
   grunt.registerMultiTask('selenium', 'Run selenium', function( data ) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
@@ -193,8 +215,9 @@ module.exports = function(grunt) {
         child,
         that = this;
 
+    grunt.log.debug(supportedCmds.join('\n'));
     grunt.log.debug('Setup Selenium Server...');
-    child = spawn('java',['-jar',seleniumjar]);
+    child = spawn('java -jar ' + seleniumjar);
 
     child.stderr.on('data', function(data){
       grunt.log.error(''+data);
@@ -272,7 +295,7 @@ module.exports = function(grunt) {
                   });
                 }, function( err, results ){
                   promise = promise.then(function(){
-                    store = {};
+                    storedVars = {};
                     grunt.log.writeln('  Finish suite['+suite+']');
                     callback();
                   });

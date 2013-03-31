@@ -1,7 +1,7 @@
 {
   "name": "grunt-selenium",
   "description": "Run Selenium suite",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage": "https://github.com/sideroad/grunt-selenium",
   "author": {
     "name": "sideroad",
@@ -32,7 +32,8 @@
     "async": "~0.2.5",
     "jsdom": "~0.5.1",
     "mocha": "~1.8.1",
-    "wd": "~0.0.31"
+    "wd": "~0.0.31",
+    "simple-spawn": "~0.0.2"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.1.1",

@@ -12,13 +12,18 @@
 <tr><td rowspan="1" colspan="3">Test1</td></tr>
 </thead><tbody>
 <tr>
+	<td>store</td>
+	<td>sideroad (sideroad) · GitHub</td>
+	<td>title</td>
+</tr>
+<tr>
 	<td>open</td>
 	<td>http://github.com/sideroad/</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>sideroad (sideroad) · GitHub</td>
+	<td>${title}</td>
 	<td></td>
 </tr>
 </tbody></table>
