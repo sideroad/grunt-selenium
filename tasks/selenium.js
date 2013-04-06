@@ -21,18 +21,6 @@ module.exports = function(grunt) {
       storedVars = {},
       timeout,
       util = {
-        camelize: function(str){
-          return str.substr(0,1).toUpperCase() + str.substr(1);
-        },
-        // location : function(target){
-        //   var type = this.camelize( target.split('=')[0] ),
-        //       value = target.split('=')[1],
-        //       el;
-        //   type = ( type === 'Link' ) ? 'LinkText' : type;
-        //   grunt.log.debug('location: elementBy'+type + ' ' + target );
-        //   el = browser['elementBy' + type ].call(browser, value);
-        //   return el;
-        // },
         elementBy: function(target){
           var location = this.location(target);
           grunt.log.debug('elementBy: ' + target );
@@ -53,6 +41,11 @@ module.exports = function(grunt) {
             'link': 'link text'
           }[type] || type;
           return {type: type, value: value};
+        },
+        restore: function(str){
+          return str.replace(/\$\{([^\}]+)\}/g, function(whole, name){
+            return storedVars[name];
+          });
         }
       },
       assert = {
@@ -64,9 +57,7 @@ module.exports = function(grunt) {
           }
         },
         equal: function(cmd, actual, expected, msg){
-          expected = expected.replace(/\$\{([^\}]+)\}/g, function(whole, name){
-            return storedVars[name];
-          });
+          expected = util.restore(expected);
           var pattern = new RegExp("^"+(expected.replace(/(\.|\[|\]|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
 
           grunt.log.debug( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
@@ -88,11 +79,26 @@ module.exports = function(grunt) {
             return browser.get(target);
           });
         },
+        assertAlert: function( expected, msg ){
+          return this.then(function(){
+            return browser.alertText();
+          }).then(function(text){
+            assert.equal('assertAlert', text, expected, msg );
+            return browser.acceptAlert();
+          }).then(function(){});
+        },
         assertElementPresent: function( target, msg ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
             assert.ok('assertElementPresent', el, '['+target+']'+msg );
+          });
+        },
+        assertElementNotPresent: function( target, msg ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            assert.ok('assertElementPresent', !el, '['+target+']'+msg );
           });
         },
         assertLocation: function( expected, msg ){
@@ -118,12 +124,18 @@ module.exports = function(grunt) {
             assert.ok('assertTextPresent', isPresented, '['+expected+']'+msg );
           });
         },
+        assertTextNotPresent: function( expected, msg ){
+          return this.then(function(){
+            return browser.textPresent( expected, 'body' );
+          }).then(function( isPresented ){
+            assert.ok('assertTextPresent', !isPresented, '['+expected+']'+msg );
+          });
+        },
         assertTitle: function( expected, msg){
           return this.then(function(){
             return browser.title();
           }).then(function(title){
             assert.equal( 'assertTitle', title, expected, msg );
-            return browser.title();
           });
         },
         click: function( target ){
@@ -131,40 +143,50 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function( el ){
             return browser.clickElement(el);
-          });
+          }).then(function(){});
         },
         clickAndWait: function( target ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function( el ){
             return browser.clickElement(el);
-          });
+          }).then(function(){});
         },
         deleteCookie: function( name ){
           return this.then(function(){
             return browser.deleteCookie(name);
-          });
+          }).then(function(){});
+        },
+        echo: function( value ){
+          grunt.log.writeln(util.restore(value));
+          return this;
         },
         goBack: function(){
           return this.then(function(){
             return browser.back();
-          });
+          }).then(function(){});
         },
         goBackAndWait: function(){
           return this.then(function(){
             return browser.back();
-          });
+          }).then(function(){});
         },
         store: function( value , name ){
           storedVars[name] = value;
           return this;
+        },
+        storeElementPresent: function( target, name ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            storedVars[name] = el ? true : false;
+          });
         },
         storeEval: function( script, name ){
           return this.then(function(){
             return browser.execute( script );
           }).then(function( result ){
             storedVars[name] = result;
-            return this;
           });
         },
         storeText: function( target, name ){
@@ -181,6 +203,20 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function( el ){
             return browser.type(el, keys);
+          }).then(function(){});
+        },
+        verifyElementPresent: function( target, msg ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            assert.ok('verifyElementPresent', el, '['+target+']'+msg );
+          });
+        },
+        verifyElementNotPresent: function( target, msg ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            assert.ok('verifyElementPresent', !el, '['+target+']'+msg );
           });
         },
         verifyText: function( target, expected, msg ){
@@ -192,10 +228,31 @@ module.exports = function(grunt) {
             assert.equal('verifyText', text, expected, '['+target+']'+msg );
           });
         },
+        verifyTextPresent: function( expected, msg ){
+          return this.then(function(){
+            return browser.textPresent( expected, 'body' );
+          }).then(function( isPresented ){
+            assert.ok('verifyTextPresent', isPresented, '['+expected+']'+msg );
+          });
+        },
+        verifyTextNotPresent: function( expected, msg ){
+          return this.then(function(){
+            return browser.textPresent( expected, 'body' );
+          }).then(function( isPresented ){
+            assert.ok('verifyTextPresent', !isPresented, '['+expected+']'+msg );
+          });
+        },
+        verifyTitle: function( expected, msg){
+          return this.then(function(){
+            return browser.title();
+          }).then(function(title){
+            assert.equal( 'verifyTitle', title, expected, msg );
+          });
+        },
         waitForElementPresent: function(target){
           return this.then(function(){
             return util.waitForElement(target);
-          });
+          }).then(function(){});
         }
       },
       key,
@@ -220,7 +277,7 @@ module.exports = function(grunt) {
     child = spawn('java -jar ' + seleniumjar);
 
     child.stderr.on('data', function(data){
-      grunt.log.error(''+data);
+      grunt.log.debug(''+data);
     });
 
     child.stdout.on('data', function(data){

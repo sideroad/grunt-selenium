@@ -1,8 +1,8 @@
-# grunt-selenium
+# Grunt Selenium
 
-> Selenium IDE can debug easily more than WebDriver.
-> WebDriver can test on browsers not only Firefox and detect browser depended bugs.
-> This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
+- Selenium IDE can debug easily more than WebDriver.
+- WebDriver can test on browsers not only Firefox and detect browser depended bugs.
+This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -49,22 +49,33 @@ Array value that is used to testing browsers.
 
 ## Supported commands
   - open
+  - assertAlert
   - assertElementPresent
+  - assertElementNotPresent
   - assertLocation
   - assertText
   - assertTextPresent
+  - assertTextNotPresent
   - assertTitle
   - click
   - clickAndWait
   - deleteCookie
+  - echo
   - goBack
   - goBackAndWait
   - store
+  - storeElementPresent
   - storeEval
   - storeText
   - type
+  - verifyElementPresent
+  - verifyElementNotPresent
   - verifyText
+  - verifyTextPresent
+  - verifyTextNotPresent
+  - verifyTitle
   - waitForElementPresent
+
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
