@@ -1,4 +1,9 @@
-.*
+.project
+.DS_Store
+.gitignore
+.jshintrc
+.npmignore
+.project
 node_modules
 chromedriver.log
 npm-debug.log
