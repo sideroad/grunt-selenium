@@ -2,7 +2,7 @@
 
 - Selenium IDE can debug easily more than WebDriver.
 - WebDriver can test on browsers not only Firefox and detect browser depended bugs.
-This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
+> This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -32,14 +32,24 @@ grunt.initConfig({
     },
     suite: {
       files: {
-        'example': ['test/source/*.suite']
+        'example.tap': ['test/source/**/*.suite']
       }
     }
-  },
+  }
 })
 ```
 
+### Files property
+Key  : TAP file path 
+Value: suites file path.
+
 ### Options
+
+#### options.startURL
+Type: `String`
+Default value: `undefined`
+
+Execute selenium with this URL.
 
 #### options.browsers
 Type: `Array`
