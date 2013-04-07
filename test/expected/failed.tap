@@ -1,0 +1,8 @@
+TAP version 13
+not ok 1 - firefox - assertTitle 
+not ok 2 - chrome - assertTitle 
+
+1..2
+# tests 2
+# pass 0
+# fail 2

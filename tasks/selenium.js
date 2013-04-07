@@ -49,16 +49,25 @@ module.exports = function(grunt) {
         }
       },
       assert = {
-        ok: function( cmd, actual, msg){
+        ok: function( cmd, actual, msg, tap){
+          var is = 'ok';
           grunt.log.debug( cmd + ': "' + actual + '" is ok? ' + msg );
           if(!actual){
             grunt.log.error('['+cmd+'] was failed '+msg );
             isSuccess = false;
+            is = 'not ok';
+            tap.fail++;
+          } else {
+            tap.pass++;
           }
+          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg);
+          tap.index++;
         },
-        equal: function(cmd, actual, expected, msg){
+        equal: function(cmd, actual, expected, msg, tap){
+          var pattern,
+              is = 'ok';
           expected = util.restore(expected);
-          var pattern = new RegExp("^"+(expected.replace(/(\.|\[|\]|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
+          pattern = new RegExp("^"+(expected.replace(/(\.|\[|\]|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
 
           grunt.log.debug( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
@@ -67,7 +76,13 @@ module.exports = function(grunt) {
                             '  actual  :'+actual+'\n'+
                             '  expected:'+expected);
             isSuccess = false;
+            is = 'not ok';
+            tap.fail++;
+          } else {
+            tap.pass++;
           }
+          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg);
+          tap.index++;
         }
       },
       cmd = {
@@ -79,63 +94,63 @@ module.exports = function(grunt) {
             return browser.get(target);
           });
         },
-        assertAlert: function( expected, msg ){
+        assertAlert: function( expected, msg, tap ){
           return this.then(function(){
             return browser.alertText();
           }).then(function(text){
-            assert.equal('assertAlert', text, expected, msg );
+            assert.equal('assertAlert', text, expected, msg, tap );
             return browser.acceptAlert();
           }).then(function(){});
         },
-        assertElementPresent: function( target, msg ){
+        assertElementPresent: function( target, msg, tap ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            assert.ok('assertElementPresent', el, '['+target+']'+msg );
+            assert.ok('assertElementPresent', el, '['+target+']'+msg, tap );
           });
         },
-        assertElementNotPresent: function( target, msg ){
+        assertElementNotPresent: function( target, msg, tap ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            assert.ok('assertElementPresent', !el, '['+target+']'+msg );
+            assert.ok('assertElementPresent', !el, '['+target+']'+msg, tap );
           });
         },
-        assertLocation: function( expected, msg ){
+        assertLocation: function( expected, msg, tap ){
           return this.then(function(){
             return browser.execute('window.location.href');
           }).then(function( href ){
-            assert.equal('assertLocation', href, expected, msg );
+            assert.equal('assertLocation', href, expected, msg, tap );
           });
         },
-        assertText: function( target, expected, msg ){
+        assertText: function( target, expected, tap ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
             return el.text();
           }).then(function(text){
-            assert.equal('assertText', text, expected, '['+target+']'+msg );
+            assert.equal('assertText', text, expected, '['+target+']', tap );
           });
         },
-        assertTextPresent: function( expected, msg ){
+        assertTextPresent: function( expected, msg, tap ){
           return this.then(function(){
             return browser.textPresent( expected, 'body' );
           }).then(function( isPresented ){
-            assert.ok('assertTextPresent', isPresented, '['+expected+']'+msg );
+            assert.ok('assertTextPresent', isPresented, '['+expected+']'+msg, tap );
           });
         },
-        assertTextNotPresent: function( expected, msg ){
+        assertTextNotPresent: function( expected, msg, tap ){
           return this.then(function(){
             return browser.textPresent( expected, 'body' );
           }).then(function( isPresented ){
-            assert.ok('assertTextPresent', !isPresented, '['+expected+']'+msg );
+            assert.ok('assertTextPresent', !isPresented, '['+expected+']'+msg, tap );
           });
         },
-        assertTitle: function( expected, msg){
+        assertTitle: function( expected, msg, tap){
           return this.then(function(){
             return browser.title();
           }).then(function(title){
-            assert.equal( 'assertTitle', title, expected, msg );
+            assert.equal( 'assertTitle', title, expected, msg, tap );
           });
         },
         click: function( target ){
@@ -205,48 +220,48 @@ module.exports = function(grunt) {
             return browser.type(el, keys);
           }).then(function(){});
         },
-        verifyElementPresent: function( target, msg ){
+        verifyElementPresent: function( target, msg, tap ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            assert.ok('verifyElementPresent', el, '['+target+']'+msg );
+            assert.ok('verifyElementPresent', el, '['+target+']'+msg, tap );
           });
         },
-        verifyElementNotPresent: function( target, msg ){
+        verifyElementNotPresent: function( target, msg, tap ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            assert.ok('verifyElementPresent', !el, '['+target+']'+msg );
+            assert.ok('verifyElementPresent', !el, '['+target+']'+msg, tap );
           });
         },
-        verifyText: function( target, expected, msg ){
+        verifyText: function( target, expected, tap ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
             return el.text();
           }).then(function(text){
-            assert.equal('verifyText', text, expected, '['+target+']'+msg );
+            assert.equal('verifyText', text, expected, '['+target+']', tap );
           });
         },
-        verifyTextPresent: function( expected, msg ){
+        verifyTextPresent: function( expected, msg, tap ){
           return this.then(function(){
             return browser.textPresent( expected, 'body' );
           }).then(function( isPresented ){
-            assert.ok('verifyTextPresent', isPresented, '['+expected+']'+msg );
+            assert.ok('verifyTextPresent', isPresented, '['+expected+']'+msg, tap );
           });
         },
-        verifyTextNotPresent: function( expected, msg ){
+        verifyTextNotPresent: function( expected, msg, tap ){
           return this.then(function(){
             return browser.textPresent( expected, 'body' );
           }).then(function( isPresented ){
-            assert.ok('verifyTextPresent', !isPresented, '['+expected+']'+msg );
+            assert.ok('verifyTextPresent', !isPresented, '['+expected+']'+msg, tap );
           });
         },
-        verifyTitle: function( expected, msg){
+        verifyTitle: function( expected, msg, tap){
           return this.then(function(){
             return browser.title();
           }).then(function(title){
-            assert.equal( 'verifyTitle', title, expected, msg );
+            assert.equal( 'verifyTitle', title, expected, msg, tap );
           });
         },
         waitForElementPresent: function(target){
@@ -289,24 +304,32 @@ module.exports = function(grunt) {
       var wd = require('wd'),
           promise;
 
-      async.mapSeries( options.browsers, function(browserName, callback){
-        grunt.log.writeln('Setup browser ['+browserName+']');
-        browser = wd.promiseRemote();
-        promise = browser.init({
-          browserName: browserName,
-          name: 'This is an example test'
-        });
-        timeout = options.timeout;
-        that.files.forEach(function(f) {
-          var suites = f.src.filter(function(filepath) {
-            // Warn on and remove invalid source files (if nonull was set).
-            if (!grunt.file.exists(filepath)) {
-              grunt.log.warn('Source file "' + filepath + '" not found.');
-              return false;
-            } else {
-              return true;
-            }
+      that.files.forEach(function(f) {
+        var suites = f.src.filter(function(filepath) {
+              if (!grunt.file.exists(filepath)) {
+                grunt.log.warn('Source file "' + filepath + '" not found.');
+                return false;
+              } else {
+                return true;
+              }
+            }),
+            tap = {
+              data:['TAP version 13'],
+              name: "",
+              index:1,
+              pass: 0,
+              fail: 0
+            };
+
+        async.mapSeries( options.browsers, function(browserName, callback){
+          tap.name = browserName;
+          grunt.log.writeln('Setup browser ['+browserName+']');
+          browser = wd.promiseRemote();
+          promise = browser.init({
+            browserName: browserName,
+            name: 'This is an example test'
           });
+          timeout = options.timeout;
 
           async.mapSeries( suites, function( suite, callback ){
             grunt.log.writeln('  Running suite['+suite+']');
@@ -342,7 +365,7 @@ module.exports = function(grunt) {
                             grunt.log.warn('Command not supported['+command+']');
                             return this;
                           }
-                        ).apply( promise, [ target, value ] );
+                        ).apply( promise, [ target, value, tap ] );
                       });
                       promise = promise.then(function(){
                         grunt.log.writeln('    Finish  test case['+testcase+']');
@@ -367,10 +390,16 @@ module.exports = function(grunt) {
               callback();
             }).done();
           });
+        }, function(){
+          tap.data.push('');
+          tap.data.push('1..'+(tap.pass + tap.fail));
+          tap.data.push('# tests '+(tap.pass + tap.fail));
+          tap.data.push('# pass '+ tap.pass);
+          tap.data.push('# fail '+ tap.fail);
+          grunt.file.write(f.dest, tap.data.join('\n'));      
+          child.kill();
+          done(options.force || isSuccess);
         });
-      }, function(){          
-        child.kill();
-        done(isSuccess);
       });
     });
   });

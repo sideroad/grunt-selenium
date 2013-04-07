@@ -1,5 +1,4 @@
+.*
 node_modules
-.DS_Store
-.project
 chromedriver.log
 npm-debug.log

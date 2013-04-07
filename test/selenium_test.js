@@ -2,6 +2,9 @@
 
 var grunt = require('grunt');
 
+function getNormalizedFile(filepath) {
+  return grunt.util.normalizelf(grunt.file.read(filepath));
+}
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -23,26 +26,22 @@ var grunt = require('grunt');
 */
 
 exports.selenium = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
-  default_options: function(test) {
+  success: function(test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+    var actual = getNormalizedFile('test/actual/success.tap');
+    var expected = getNormalizedFile('test/expected/success.tap');
+    test.equal(actual, expected, 'should output tap of success case.');
 
     test.done();
   },
-  custom_options: function(test) {
+  fail : function(test){
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
+    var actual = getNormalizedFile('test/actual/failed.tap');
+    var expected = getNormalizedFile('test/expected/failed.tap');
+    test.equal(actual, expected, 'should output tap of failed case.');
 
     test.done();
-  },
+  }
 };

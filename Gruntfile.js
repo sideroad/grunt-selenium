@@ -19,19 +19,37 @@ module.exports = function(grunt) {
         startURL : 'http://sideroad.secret.jp/',
         browsers: ['firefox', 'chrome']
       },
-      suite: {
+      success: {
         files: {
-         'example': ['test/source/*.suite']
+         'test/actual/success.tap': ['test/source/success/*.suite']
+        }
+      },
+      failed: {
+        files: {
+         'test/actual/failed.tap': ['test/source/failed/*.suite']
+        },
+        options: {
+          force: true
         }
       }
+    },
+
+    clean: ['test/actual/*'],
+
+    // Unit tests.
+    nodeunit: {
+      tests: ['test/*_test.js']
     }
 
   });
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
   // By default, lint and run all tests.
+  grunt.registerTask('test', ['clean', 'selenium', 'nodeunit']);
   grunt.registerTask('default', ['selenium']);
 
 };

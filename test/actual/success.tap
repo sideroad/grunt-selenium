@@ -1,0 +1,20 @@
+TAP version 13
+ok 1 - firefox - assertTitle 
+ok 2 - firefox - assertText [css=h3]
+ok 3 - firefox - assertTitle 
+ok 4 - firefox - assertText [css=h1]
+ok 5 - firefox - assertTextPresent [sideroad]
+ok 6 - firefox - assertTitle 
+ok 7 - firefox - assertTitle 
+ok 8 - chrome - assertTitle 
+ok 9 - chrome - assertText [css=h3]
+ok 10 - chrome - assertTitle 
+ok 11 - chrome - assertText [css=h1]
+ok 12 - chrome - assertTextPresent [sideroad]
+ok 13 - chrome - assertTitle 
+ok 14 - chrome - assertTitle 
+
+1..14
+# tests 14
+# pass 14
+# fail 0
