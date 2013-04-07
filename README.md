@@ -2,6 +2,7 @@
 
 - Selenium IDE can debug easily more than WebDriver.
 - WebDriver can test on browsers not only Firefox and detect browser depended bugs.
+
 > This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
 
 ## Getting Started
