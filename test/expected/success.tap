@@ -1,15 +1,15 @@
 TAP version 13
 ok 1 - firefox - assertTitle 
-ok 2 - firefox - assertText [css=h3]
+ok 2 - firefox - assertText [css=span.post-title]
 ok 3 - firefox - assertTitle 
-ok 4 - firefox - assertText [css=h1]
+ok 4 - firefox - assertText [css=span.post-title]
 ok 5 - firefox - assertTextPresent [sideroad]
 ok 6 - firefox - assertTitle 
 ok 7 - firefox - assertTitle 
 ok 8 - chrome - assertTitle 
-ok 9 - chrome - assertText [css=h3]
+ok 9 - chrome - assertText [css=span.post-title]
 ok 10 - chrome - assertTitle 
-ok 11 - chrome - assertText [css=h1]
+ok 11 - chrome - assertText [css=span.post-title]
 ok 12 - chrome - assertTextPresent [sideroad]
 ok 13 - chrome - assertTitle 
 ok 14 - chrome - assertTitle 

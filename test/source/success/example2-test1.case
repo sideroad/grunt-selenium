@@ -18,22 +18,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Search</td>
+	<td>css=#advanced_search</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Search</td>
+	<td>css=#advanced_search</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>name=q</td>
+	<td>css=.textfield.long.js-advanced-search-prefix</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>name=q</td>
+	<td>css=.textfield.long.js-advanced-search-prefix</td>
 	<td>sideroad</td>
 </tr>
 <tr>
@@ -43,22 +43,7 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>Search · sideroad · GitHub</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>css=a[href='https://github.com/search?q=sideroad&amp;ref=simplesearch&amp;type=Users']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=sideroad</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=em</td>
+	<td>Search · @sideroad · GitHub</td>
 	<td></td>
 </tr>
 </tbody></table>

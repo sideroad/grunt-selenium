@@ -18,23 +18,23 @@
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>css=h3</td>
-	<td>*Text Animation*</td>
+	<td>css=span.post-title</td>
+	<td>Setup Grunt on Jenkins</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=plugins</td>
+	<td>link=Plugins</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>jQuery Plugins - sideroad</td>
+	<td>jQuery Plugins</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>css=h1</td>
-	<td>jQuery Plugins</td>
+	<td>css=span.post-title</td>
+	<td>jQuery Text Animation</td>
 </tr>
 <tr>
 	<td>assertTextPresent</td>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>jQuery Plugins for Rich application - sideroad</td>
+	<td>sideroad - Rich Web Application Development</td>
 	<td></td>
 </tr>
 </tbody></table>

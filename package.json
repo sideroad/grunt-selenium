@@ -32,7 +32,7 @@
     "async": "~0.2.5",
     "jsdom": "~0.5.1",
     "mocha": "~1.8.1",
-    "wd": "~0.0.31",
+    "wd": "~0.0.32",
     "simple-spawn": "~0.0.2"
   },
   "devDependencies": {
