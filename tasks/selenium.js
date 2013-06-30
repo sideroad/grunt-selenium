@@ -161,10 +161,15 @@ module.exports = function(grunt) {
           }).then(function(){});
         },
         clickAndWait: function( target ){
+          var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
           return this.then(function(){
+            return browser.safeEval('window.'+token+'=true;');
+          }).then(function(){
             return util.elementBy(target);
           }).then(function( el ){
             return browser.clickElement(el);
+          }).then(function(){
+            return browser.waitForCondition('!window.'+token, timeout);
           }).then(function(){});
         },
         deleteCookie: function( name ){
