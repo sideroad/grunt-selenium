@@ -174,6 +174,23 @@ module.exports = function(grunt) {
             return browser.waitForCondition('!window.'+token, timeout);
           }).then(function(){});
         },
+        storeCookieByName: function(cookieName, name){
+          return this.then(function(){
+            return browser.allCookie();
+          }).then(function(cookies){
+            var cookie = _(cookies).where({name:name}) || {};
+            storedVars[name] = cookie.value;
+          });
+        },
+        createCookie: function( pair, options ){
+          var map = {},
+              keyset = pair.split("=");
+
+          map[keyset[0]] = keyset[1];
+          return this.then(function(){
+            return browser.setCookie(map, options);
+          }).then(function(){});
+        },
         deleteCookie: function( name ){
           return this.then(function(){
             return browser.deleteCookie(name);
