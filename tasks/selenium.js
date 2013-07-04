@@ -15,7 +15,9 @@ module.exports = function(grunt) {
       path = require('path'),
       fs = require('fs'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
-      seleniumjar = __dirname+'/lib/selenium-server-standalone-2.31.0.jar',
+      seleniumjar = __dirname+'/lib/selenium-server-standalone-2.33.0.jar',
+      iedriver64 = __dirname+'/lib/IEDriverServer.x64.exe',
+      iedriver86 = __dirname+'/lib/IEDriverServer.x86.exe',
       browser,
       isSuccess = true,
       storedVars = {},
@@ -294,7 +296,9 @@ module.exports = function(grunt) {
 
     grunt.log.debug(supportedCmds.join('\n'));
     grunt.log.debug('Setup Selenium Server...');
-    child = spawn('java -jar ' + seleniumjar);
+    child = spawn('java -jar ' + seleniumjar + ( process.platform !== 'win32' ? '' : 
+                                                 process.config.variables.host_arch === 'x64' ? ' -Dwebdriver.ie.driver='+ iedriver64 :
+                                                                                                ' -Dwebdriver.ie.driver='+ iedriver86 ));
 
     child.stderr.on('data', function(data){
       grunt.log.debug(''+data);
