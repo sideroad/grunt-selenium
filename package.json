@@ -1,7 +1,7 @@
 {
   "name": "grunt-selenium",
   "description": "Run Selenium suite",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "homepage": "https://github.com/sideroad/grunt-selenium",
   "author": {
     "name": "sideroad",
