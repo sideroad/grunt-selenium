@@ -14,6 +14,7 @@ module.exports = function(grunt) {
       jsdom = require('jsdom'),
       path = require('path'),
       fs = require('fs'),
+      _ = require('lodash'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.33.0.jar',
       iedriver64 = __dirname+'/lib/IEDriverServer.x64.exe',
@@ -28,11 +29,6 @@ module.exports = function(grunt) {
           grunt.log.debug('elementBy: ' + target );
           return browser.element( location.type, location.value );
         },
-        waitForElement: function(target){
-          var location = this.location(target);
-          grunt.log.debug('waitForElement: ' + target );
-          return browser.waitForElement( location.type, location.value, timeout );
-        },
         location : function(target){
           var split = target.split('='),
               type = split.shift(),
@@ -42,18 +38,37 @@ module.exports = function(grunt) {
             'css': 'css selector',
             'link': 'link text'
           }[type] || type;
+          if(/^\/\//.test(type)){
+            value = type;
+            type = 'xpath';
+          }
           return {type: type, value: value};
         },
         restore: function(str){
           return str.replace(/\$\{([^\}]+)\}/g, function(whole, name){
             return storedVars[name];
           });
+        },
+        waitForElement: function(target){
+          var location = this.location(target);
+          grunt.log.debug('waitForElement: ' + target );
+          return browser.waitForElement( location.type, location.value, timeout );
+        },
+        waitForNotVisible: function(target){
+          var location = this.location(target);
+          grunt.log.debug('waitForVisible: ' + target );
+          return browser.waitForVisible( location.type, location.value, timeout );
+        },
+        waitForVisible: function(target){
+          var location = this.location(target);
+          grunt.log.debug('waitForVisible: ' + target );
+          return browser.waitForVisible( location.type, location.value, timeout );
         }
       },
       assert = {
         ok: function( cmd, actual, msg, tap){
           var is = 'ok';
-          grunt.log.debug( cmd + ': "' + actual + '" is ok? ' + msg );
+          grunt.log.writeln( cmd + ': "' + actual + '" is ok? ' + msg );
           if(!actual){
             grunt.log.error('['+cmd+'] was failed '+msg );
             isSuccess = false;
@@ -69,9 +84,9 @@ module.exports = function(grunt) {
           var pattern,
               is = 'ok';
           expected = util.restore(expected);
-          pattern = new RegExp("^"+(expected.replace(/(\.|\[|\]|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
+          pattern = new RegExp("^"+(expected.replace(/(\.|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
 
-          grunt.log.debug( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
+          grunt.log.writeln( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
           if(!pattern.test(actual)) {
             grunt.log.error('['+cmd+'] was failed '+msg+'\n'+
@@ -103,6 +118,37 @@ module.exports = function(grunt) {
             assert.equal('assertAlert', text, expected, msg, tap );
             return browser.acceptAlert();
           }).then(function(){});
+        },
+        assertAttribute: function( target, expected, tap ){
+          var sets = target.split("@"),
+              attr = sets[1];
+
+          target = sets[0];
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getAttribute(attr);
+          }).then(function(value){
+            assert.equal('assertAttribute', value, expected, '['+target+']', tap );
+          });
+        },
+        assertEditable: function( target, msg, tap ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getAttribute('disabled');
+          }).then(function(value){
+            assert.ok('assertEditable', !value, '['+target+']'+msg, tap );
+          });
+        },
+        assertNotEditable: function( target, msg, tap ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getAttribute('disabled');
+          }).then(function(value){
+            assert.ok('assertNotEditable', value, '['+target+']'+msg, tap );
+          });
         },
         assertElementPresent: function( target, msg, tap ){
           return this.then(function(){
@@ -153,6 +199,15 @@ module.exports = function(grunt) {
             return browser.title();
           }).then(function(title){
             assert.equal( 'assertTitle', title, expected, msg, tap );
+          });
+        },
+        assertValue: function( target, expected, tap ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getValue();
+          }).then(function(value){
+            assert.equal('assertValue', value, expected, '['+target+']', tap );
           });
         },
         click: function( target ){
@@ -210,6 +265,25 @@ module.exports = function(grunt) {
             return browser.back();
           }).then(function(){});
         },
+        select: function(target, options, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return browser.clickElement(el);
+          }).then(function(el){
+            var sets = options.split("="),
+                type = sets[0],
+                value = sets[1];
+
+            return el.element('css', 'option'+{
+              'label': ':contains('+value+')',
+              'value': '[value='+value+']',
+              'index': ':eq('+value+')'
+            }[type]||':contains('+value+')');
+          }).then(function(el){
+            return browser.clickElement(el);
+          }).then(function(){});
+        },
         store: function( value , name ){
           storedVars[name] = value;
           return this;
@@ -244,6 +318,47 @@ module.exports = function(grunt) {
             return browser.type(el, keys);
           }).then(function(){});
         },
+        refreshAndWait: function( target ){
+          var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
+          return this.then(function(){
+            return browser.safeEval('window.'+token+'=true;');
+          }).then(function(){
+            return browser.refresh();
+          }).then(function(){
+            return browser.waitForCondition('!window.'+token, timeout);
+          }).then(function(){});
+        },
+        verifyAttribute: function( target, expected, tap ){
+          var sets = target.split("@"),
+              attr = sets[1];
+
+          target = sets[0];
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getAttribute(attr);
+          }).then(function(value){
+            assert.equal('verifyAttribute', value, expected, '['+target+']', tap );
+          });
+        },
+        verifyEditable: function( target, msg, tap ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getAttribute('disabled');
+          }).then(function(value){
+            assert.ok('verifyEditable', !value, '['+target+']'+msg, tap );
+          });
+        },
+        verifyNotEditable: function( target, msg, tap ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getAttribute('disabled');
+          }).then(function(value){
+            assert.ok('verifyNotEditable', value, '['+target+']'+msg, tap );
+          });
+        },
         verifyElementPresent: function( target, msg, tap ){
           return this.then(function(){
             return util.elementBy(target);
@@ -256,6 +371,13 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function(el){
             assert.ok('verifyElementPresent', !el, '['+target+']'+msg, tap );
+          });
+        },
+        verifyLocation: function( expected, msg, tap ){
+          return this.then(function(){
+            return browser.execute('window.location.href');
+          }).then(function( href ){
+            assert.equal('verifyLocation', href, expected, msg, tap );
           });
         },
         verifyText: function( target, expected, tap ){
@@ -288,9 +410,28 @@ module.exports = function(grunt) {
             assert.equal( 'verifyTitle', title, expected, msg, tap );
           });
         },
+        verifyValue: function( target, expected, tap ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return el.getValue();
+          }).then(function(value){
+            assert.equal('verifyValue', value, expected, '['+target+']', tap );
+          });
+        },
         waitForElementPresent: function(target){
           return this.then(function(){
             return util.waitForElement(target);
+          }).then(function(){});
+        },
+        waitForVisible: function(target){
+          return this.then(function(){
+            return util.waitForVisible(target);
+          }).then(function(){});
+        },
+        waitForNotVisible: function(target){
+          return this.then(function(){
+            return util.waitForNotVisible(target);
           }).then(function(){});
         }
       },
@@ -382,9 +523,9 @@ module.exports = function(grunt) {
                       });
                       $('tbody').find('tr').each(function(){
                         var $tr = $(this),
-                            command = $tr.find('td:eq(0)').html(),
-                            target = $tr.find('td:eq(1)').html(),
-                            value = $tr.find('td:eq(2)').html();
+                            command = $tr.find('td:eq(0)').text(),
+                            target = $tr.find('td:eq(1)').text(),
+                            value = $tr.find('td:eq(2)').text();
                         promise = ( 
                           cmd[command]||
                           function( target, value ){
