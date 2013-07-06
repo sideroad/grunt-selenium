@@ -23,6 +23,7 @@ module.exports = function(grunt) {
       isSuccess = true,
       storedVars = {},
       timeout,
+      htmlpath,
       util = {
         elementBy: function(target){
           var location = this.location(target);
@@ -51,26 +52,26 @@ module.exports = function(grunt) {
         },
         waitForElement: function(target){
           var location = this.location(target);
-          grunt.log.debug('waitForElement: ' + target );
+          grunt.log.debug('      waitForElement: ' + target );
           return browser.waitForElement( location.type, location.value, timeout );
         },
         waitForNotVisible: function(target){
           var location = this.location(target);
-          grunt.log.debug('waitForVisible: ' + target );
+          grunt.log.debug('      waitForVisible: ' + target );
           return browser.waitForVisible( location.type, location.value, timeout );
         },
         waitForVisible: function(target){
           var location = this.location(target);
-          grunt.log.debug('waitForVisible: ' + target );
+          grunt.log.debug('      waitForVisible: ' + target );
           return browser.waitForVisible( location.type, location.value, timeout );
         }
       },
       assert = {
         ok: function( cmd, actual, msg, tap){
           var is = 'ok';
-          grunt.log.writeln( cmd + ': "' + actual + '" is ok? ' + msg );
+          grunt.log.writeln('      '+ cmd + ': "' + actual + '" is ok? ' + msg );
           if(!actual){
-            grunt.log.error('['+cmd+'] was failed '+msg );
+            grunt.log.error('      ['+cmd+'] was failed '+msg );
             isSuccess = false;
             is = 'not ok';
             tap.fail++;
@@ -86,12 +87,12 @@ module.exports = function(grunt) {
           expected = util.restore(expected);
           pattern = new RegExp("^"+(expected.replace(/(\.|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
 
-          grunt.log.writeln( cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
+          grunt.log.writeln( '      '+cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
           if(!pattern.test(actual)) {
-            grunt.log.error('['+cmd+'] was failed '+msg+'\n'+
-                            '  actual  :'+actual+'\n'+
-                            '  expected:'+expected);
+            grunt.log.error('      ['+cmd+'] was failed '+msg+'\n'+
+                            '        actual  :'+actual+'\n'+
+                            '        expected:'+expected);
             isSuccess = false;
             is = 'not ok';
             tap.fail++;
@@ -106,9 +107,16 @@ module.exports = function(grunt) {
         /*
          * Commands passed target, value arguments 
          */ 
-        open: function(target){
+        open: function(url){
           return this.then(function(){
-            return browser.get(target);
+            grunt.log.writeln('      open['+url+']');
+            return browser.get(url);
+          }).then(function(){
+            return browser.source();
+          }).then(function(html){
+            if(htmlpath) {
+              fs.writeFile(path.join( htmlpath, (+new Date())+'.html') , html);
+            }
           });
         },
         assertAlert: function( expected, msg, tap ){
@@ -210,10 +218,29 @@ module.exports = function(grunt) {
             assert.equal('assertValue', value, expected, '['+target+']', tap );
           });
         },
+        captureEntirePageScreenshot: function(filename, options, tap){
+          return this.then(function(){
+            return browser.takeScreenshot();
+          }).then(function(screenshot){
+            filename = util.restore(filename);
+            grunt.log.writeln('      captureEntirePageScreenshot['+filename+']');
+            fs.writeFile(filename, new Buffer( screenshot, 'base64').toString('binary'), 'binary');
+          });
+        },
+        captureEntirePageScreenshotAndWait: function(filename, options, tap){
+          return this.then(function(){
+            return browser.takeScreenshot();
+          }).then(function(screenshot){
+            filename = util.restore(filename);
+            grunt.log.writeln('      captureEntirePageScreenshot['+filename+']');
+            fs.writeFile(filename, new Buffer( screenshot, 'base64').toString('binary'), 'binary');
+          });
+        },
         click: function( target ){
           return this.then(function(){
             return util.elementBy(target);
           }).then(function( el ){
+            grunt.log.writeln('      click['+target+']');
             return browser.clickElement(el);
           }).then(function(){});
         },
@@ -224,6 +251,7 @@ module.exports = function(grunt) {
           }).then(function(){
             return util.elementBy(target);
           }).then(function( el ){
+            grunt.log.writeln('      clickAndWait['+target+']');
             return browser.clickElement(el);
           }).then(function(){
             return browser.waitForCondition('!window.'+token, timeout);
@@ -235,6 +263,7 @@ module.exports = function(grunt) {
           }).then(function(cookies){
             var cookie = _(cookies).where({name:name}) || {};
             storedVars[name] = cookie.value;
+            grunt.log.writeln('      storeCookieByName['+cookieName+', '+name+']');
           });
         },
         createCookie: function( pair, options ){
@@ -243,25 +272,29 @@ module.exports = function(grunt) {
 
           map[keyset[0]] = keyset[1];
           return this.then(function(){
+            grunt.log.writeln('      createCookie['+pair+', '+options+']');            
             return browser.setCookie(map, options);
           }).then(function(){});
         },
         deleteCookie: function( name ){
           return this.then(function(){
+            grunt.log.writeln('      deleteCookie['+name+']');            
             return browser.deleteCookie(name);
           }).then(function(){});
         },
         echo: function( value ){
-          grunt.log.writeln(util.restore(value));
+          grunt.log.writeln('      echo['+ util.restore(value)+']');
           return this;
         },
         goBack: function(){
           return this.then(function(){
+          grunt.log.writeln('      goBack');
             return browser.back();
           }).then(function(){});
         },
         goBackAndWait: function(){
           return this.then(function(){
+          grunt.log.writeln('      goBackAndWait');
             return browser.back();
           }).then(function(){});
         },
@@ -281,11 +314,13 @@ module.exports = function(grunt) {
               'index': ':eq('+value+')'
             }[type]||':contains('+value+')');
           }).then(function(el){
+            grunt.log.writeln('      select['+target+', '+options+']');
             return browser.clickElement(el);
           }).then(function(){});
         },
         store: function( value , name ){
-          storedVars[name] = value;
+          storedVars[name] = util.restore(value);
+          grunt.log.writeln('      store['+value+', '+name+']');
           return this;
         },
         storeElementPresent: function( target, name ){
@@ -293,12 +328,14 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function(el){
             storedVars[name] = el ? true : false;
+            grunt.log.writeln('      storeElementPresent['+target+', '+name+']');
           });
         },
         storeEval: function( script, name ){
           return this.then(function(){
-            return browser.execute( script );
+            return browser.safeExecute( script );
           }).then(function( result ){
+            grunt.log.writeln('      storeEval['+script+'] result['+result+']');
             storedVars[name] = result;
           });
         },
@@ -308,6 +345,7 @@ module.exports = function(grunt) {
           }).then(function(el){
             return el.text();
           }).then(function(text){
+            grunt.log.writeln('      storeText['+target+'] result['+name+']');
             storedVars[name] = text;
           });
         },
@@ -315,12 +353,14 @@ module.exports = function(grunt) {
           return this.then(function(){
             return util.elementBy(target);
           }).then(function( el ){
+            grunt.log.writeln('      type['+target+', '+keys+']');
             return browser.type(el, keys);
           }).then(function(){});
         },
         refreshAndWait: function( target ){
           var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
           return this.then(function(){
+            grunt.log.writeln('      refreshAndWait['+target+']');
             return browser.safeEval('window.'+token+'=true;');
           }).then(function(){
             return browser.refresh();
@@ -497,6 +537,7 @@ module.exports = function(grunt) {
             name: 'This is an example test'
           });
           timeout = options.timeout;
+          htmlpath = options.source;
 
           async.mapSeries( suites, function( suite, callback ){
             grunt.log.writeln('  Running suite['+suite+']');

@@ -17,18 +17,29 @@
 	<td></td>
 </tr>
 <tr>
+	<td>storeEval</td>
+	<td>window.navigator.userAgent.replace(/\/| |;|\(|\.|\:|\)/g,'')</td>
+	<td>ua</td>
+</tr>
+<tr>
+	<td>captureEntirePageScreenshotAndWait</td>
+	<td>/tmp/${ua}-capture.png</td>
+	<td></td>
+</tr>
+<tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>css=#gbqfq</td>
+	<td>css=input[name=q]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>css=#gbqfq</td>
+	<td>css=input[name=q]</td>
 	<td>sideroad secret</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#gbqfb</td>
+	<td>css=input[name=btnG]</td>
 	<td></td>
 </tr>
 <tr>

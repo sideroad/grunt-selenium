@@ -31,6 +31,15 @@ module.exports = function(grunt) {
         options: {
           force: true
         }
+      },
+      ci: {
+        options: {
+          startURL : 'http://sideroad.secret.jp/',
+          browsers: ['phantomjs']
+        },
+        files: {
+         'test/actual/ci.tap': ['test/source/success/*.suite']
+        }
       }
     },
 
@@ -50,6 +59,7 @@ module.exports = function(grunt) {
 
   // By default, lint and run all tests.
   grunt.registerTask('test', ['clean', 'selenium', 'nodeunit']);
+  grunt.registerTask('ci', ['clean', 'selenium']);
   grunt.registerTask('default', ['selenium']);
 
 };

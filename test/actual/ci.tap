@@ -1,0 +1,13 @@
+TAP version 13
+ok 1 - phantomjs - assertTitle 
+ok 2 - phantomjs - assertText [css=span.post-title]
+ok 3 - phantomjs - assertTitle 
+ok 4 - phantomjs - assertText [css=span.post-title]
+ok 5 - phantomjs - assertTextPresent [sideroad]
+ok 6 - phantomjs - assertTitle 
+ok 7 - phantomjs - assertTitle 
+
+1..7
+# tests 7
+# pass 7
+# fail 0
