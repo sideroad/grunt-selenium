@@ -77,6 +77,9 @@ The path to save html source, when execute open command
 ## Supported commands
   - open
   - assertAlert
+  - assertAttribute
+  - assertEditable
+  - assertNotEditable
   - assertElementPresent
   - assertElementNotPresent
   - assertLocation
@@ -84,25 +87,38 @@ The path to save html source, when execute open command
   - assertTextPresent
   - assertTextNotPresent
   - assertTitle
+  - assertValue
+  - captureEntirePageScreenshot
+  - captureEntirePageScreenshotAndWait
   - click
   - clickAndWait
+  - storeCookieByName
+  - createCookie
   - deleteCookie
   - echo
   - goBack
   - goBackAndWait
+  - select
   - store
   - storeElementPresent
   - storeEval
   - storeText
   - type
+  - refreshAndWait
+  - verifyAttribute
+  - verifyEditable
+  - verifyNotEditable
   - verifyElementPresent
   - verifyElementNotPresent
+  - verifyLocation
   - verifyText
   - verifyTextPresent
   - verifyTextNotPresent
   - verifyTitle
+  - verifyValue
   - waitForElementPresent
-
+  - waitForVisible
+  - waitForNotVisible
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
