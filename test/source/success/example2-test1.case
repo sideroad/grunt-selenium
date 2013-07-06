@@ -39,7 +39,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=input[name=btnG]</td>
+	<td>css=[name=btnG]</td>
 	<td></td>
 </tr>
 <tr>

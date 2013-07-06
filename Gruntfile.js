@@ -25,11 +25,11 @@ module.exports = function(grunt) {
         }
       },
       failed: {
-        files: {
-         'test/actual/failed.tap': ['test/source/failed/*.suite']
-        },
         options: {
           force: true
+        },
+        files: {
+         'test/actual/failed.tap': ['test/source/failed/*.suite']
         }
       },
       ci: {

@@ -17,8 +17,6 @@ module.exports = function(grunt) {
       _ = require('lodash'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.33.0.jar',
-      iedriver64 = __dirname+'/lib/IEDriverServer.x64.exe',
-      iedriver86 = __dirname+'/lib/IEDriverServer.x86.exe',
       browser,
       isSuccess = true,
       storedVars = {},
@@ -476,7 +474,23 @@ module.exports = function(grunt) {
         }
       },
       key,
-      supportedCmds = [];
+      supportedCmds = [],
+      getDriverOptions = function(){
+        var options = [],
+            base = path.join( __dirname,'lib' );
+
+        //webdriver.ie.driver
+        options.push( process.platform !== 'win32' ? '' : 
+                      process.config.variables.host_arch === 'x64' ? '-Dwebdriver.ie.driver='+ base + path.sep + 'IEDriverServer.x64.exe' :
+                                                                     '-Dwebdriver.ie.driver='+ base + path.sep + 'IEDriverServer.x86.exe' );
+
+        //weddriver.chrome.driver
+        options.push( process.platform === 'darwin' ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'mac.chromedriver' :
+                      process.platform === 'win32'  ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'chromedriver.exe' :
+                      process.platform === 'linux'  && (process.config.variables.host_arch === 'x64') ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'linux64.chromedriver' :
+                      process.platform === 'linux'  && (process.config.variables.host_arch === 'x32') ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'linux32.chromedriver' : '');
+        return options.join(' ');
+      };
 
   for(key in cmd){
     supportedCmds.push(key);
@@ -486,17 +500,19 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
           browsers: ['firefox'],
-          timeout: 10000
+          timeout: 10000,
+          force: false
         }),
         done = this.async(),
         child,
         that = this;
 
+    isSuccess = true;
+
     grunt.log.debug(supportedCmds.join('\n'));
     grunt.log.debug('Setup Selenium Server...');
-    child = spawn('java -jar ' + seleniumjar + ( process.platform !== 'win32' ? '' : 
-                                                 process.config.variables.host_arch === 'x64' ? ' -Dwebdriver.ie.driver='+ iedriver64 :
-                                                                                                ' -Dwebdriver.ie.driver='+ iedriver86 ));
+
+    child = spawn('java -jar ' + seleniumjar + getDriverOptions());
 
     child.stderr.on('data', function(data){
       grunt.log.debug(''+data);
