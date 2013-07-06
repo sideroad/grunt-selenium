@@ -74,7 +74,7 @@ Default value: `undefined`
 
 The path to save html source, when execute open command 
 
-## Supported commands
+## Supported Selenium IDE commands
   - open
   - assertAlert
   - assertAttribute
