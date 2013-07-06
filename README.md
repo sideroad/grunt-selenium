@@ -27,8 +27,8 @@ See below and install `node-gyp`
 https://github.com/TooTallNate/node-gyp#installation
 
 ### Prepare for using IE, when you use Windows
-+Open `Internet options` on IE
-+Check `Safe mode` on all site type
+  + Open `Internet options` on IE
+  + Check `Safe mode` on all site type
 
 ## The "selenium" task
 
