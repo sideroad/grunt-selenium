@@ -1,9 +1,13 @@
-# Grunt Selenium[![Build Status](https://travis-ci.org/sideroad/grunt-selenium.png?branch=master)](https://travis-ci.org/sideroad/grunt-selenium)
-
+# Grunt Selenium
+[![Build Status](https://travis-ci.org/sideroad/grunt-selenium.png?branch=master)](https://travis-ci.org/sideroad/grunt-selenium)
+> Execute WebDriver using HTML suite file which is Selenium IDE general formatted.
 - Selenium IDE can debug easily more than WebDriver.
 - WebDriver can test on browsers not only Firefox and detect browser depended bugs.
 
-> This plugin run Selenium WebDriver using HTML Suite file which is Selenium IDE general formatted.
+## Specification
+- Execute WebDriver using HTML multiple suite files
+- Enclose IEDriver, ChromeDriver
+- Save HTML source when `open` command executed.
 
 ## Getting Started
 
@@ -68,6 +72,12 @@ Default value: `[ 'firefox' ]`
 
 Array value that is used to testing browsers.
 
+#### options.timeout
+Type: `Number`
+Default value: `10000`
+
+Command timeout.
+
 #### options.source
 Type: `String`
 Default value: `undefined`
@@ -118,7 +128,6 @@ The path to save html source, when execute open command
   - verifyValue
   - waitForElementPresent
   - waitForVisible
-  - waitForNotVisible
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).

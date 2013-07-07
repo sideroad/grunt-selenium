@@ -50,17 +50,10 @@ module.exports = function(grunt) {
         },
         waitForElement: function(target){
           var location = this.location(target);
-          grunt.log.debug('      waitForElement: ' + target );
           return browser.waitForElement( location.type, location.value, timeout );
-        },
-        waitForNotVisible: function(target){
-          var location = this.location(target);
-          grunt.log.debug('      waitForVisible: ' + target );
-          return browser.waitForVisible( location.type, location.value, timeout );
         },
         waitForVisible: function(target){
           var location = this.location(target);
-          grunt.log.debug('      waitForVisible: ' + target );
           return browser.waitForVisible( location.type, location.value, timeout );
         }
       },
@@ -309,6 +302,7 @@ module.exports = function(grunt) {
             return el.element('css', 'option'+{
               'label': ':contains('+value+')',
               'value': '[value='+value+']',
+              'id': '#'+value,
               'index': ':eq('+value+')'
             }[type]||':contains('+value+')');
           }).then(function(el){
@@ -459,17 +453,14 @@ module.exports = function(grunt) {
         },
         waitForElementPresent: function(target){
           return this.then(function(){
+            grunt.log.debug('      waitForElementPresent: ' + target );
             return util.waitForElement(target);
           }).then(function(){});
         },
         waitForVisible: function(target){
           return this.then(function(){
+            grunt.log.debug('      waitForVisible: ' + target );
             return util.waitForVisible(target);
-          }).then(function(){});
-        },
-        waitForNotVisible: function(target){
-          return this.then(function(){
-            return util.waitForNotVisible(target);
           }).then(function(){});
         }
       },
