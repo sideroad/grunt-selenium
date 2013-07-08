@@ -32,15 +32,22 @@ module.exports = function(grunt) {
           var split = target.split('='),
               type = split.shift(),
               value = split.join('=').replace(/\&amp;/g,'&'),
-              el;
-          type = {
-            'css': 'css selector',
-            'link': 'link text'
-          }[type] || type;
-          if(/^\/\//.test(type)){
-            value = type;
+              el,
+              map = {
+                'css': 'css selector',
+                'link': 'link text'                
+              };
+
+          if(map[type]){
+            type = map[type];
+          } else if(/^\/\//.test(target)){
+            value = target;
             type = 'xpath';
+          } else {
+            value = target;
+            type = 'id';
           }
+
           return {type: type, value: value};
         },
         restore: function(str){
@@ -480,7 +487,7 @@ module.exports = function(grunt) {
                       process.platform === 'win32'  ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'chromedriver.exe' :
                       process.platform === 'linux'  && (process.config.variables.host_arch === 'x64') ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'linux64.chromedriver' :
                       process.platform === 'linux'  && (process.config.variables.host_arch === 'x32') ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'linux32.chromedriver' : '');
-        return options.join(' ');
+        return ' '+options.join(' ');
       };
 
   for(key in cmd){
