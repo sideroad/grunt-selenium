@@ -365,12 +365,11 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function( el ){
             grunt.log.writeln('      type['+target+', '+keys+']');
-            return browser.type(el, keys);
-          }).then(function(el){
             if(sendEscapeAfterType){
-              return browser.type(el, require('wd').SPECIAL_KEYS.Escape);
+              keys += require('wd').SPECIAL_KEYS.Escape;
             }
-          });
+            return browser.type(el, keys);
+          }).then(function(){});
         },
         refreshAndWait: function( target ){
           var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
