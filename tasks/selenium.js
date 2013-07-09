@@ -34,8 +34,11 @@ module.exports = function(grunt) {
               value = split.join('=').replace(/\&amp;/g,'&'),
               el,
               map = {
+                'id': 'id',
                 'css': 'css selector',
-                'link': 'link text'                
+                'link': 'link text',
+                'xpath': 'xpath',
+                'name': 'name'
               };
 
           if(map[type]){
@@ -315,6 +318,13 @@ module.exports = function(grunt) {
           }).then(function(el){
             grunt.log.writeln('      select['+target+', '+options+']');
             return browser.clickElement(el);
+          }).then(function(){});
+        },
+        selectFrame: function( target ){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return browser.frame(el);
           }).then(function(){});
         },
         store: function( value , name ){
