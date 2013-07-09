@@ -82,7 +82,13 @@ Command timeout.
 Type: `String`
 Default value: `undefined`
 
-The path to save html source, when execute open command 
+The path to save html source, when execute open command.
+
+#### options.sendEscapeAfterType
+Type: `Boolean`
+Default value: `true`
+
+Send `Escape` key as `\uE00C` after type command executed.
 
 ## Supported Selenium IDE commands
   - open

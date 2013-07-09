@@ -21,6 +21,7 @@ module.exports = function(grunt) {
       isSuccess = true,
       storedVars = {},
       timeout,
+      sendEscapeAfterType,
       htmlpath,
       util = {
         elementBy: function(target){
@@ -324,6 +325,7 @@ module.exports = function(grunt) {
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
+            grunt.log.writeln('      selectFrame['+target+']');
             return browser.frame(el);
           }).then(function(){});
         },
@@ -364,7 +366,11 @@ module.exports = function(grunt) {
           }).then(function( el ){
             grunt.log.writeln('      type['+target+', '+keys+']');
             return browser.type(el, keys);
-          }).then(function(){});
+          }).then(function(el){
+            if(sendEscapeAfterType){
+              return browser.type(el, require('wd').SPECIAL_KEYS.Escape);
+            }
+          });
         },
         refreshAndWait: function( target ){
           var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
@@ -509,7 +515,8 @@ module.exports = function(grunt) {
     var options = this.options({
           browsers: ['firefox'],
           timeout: 10000,
-          force: false
+          force: false,
+          sendEscapeAfterType: true
         }),
         done = this.async(),
         child,
@@ -562,6 +569,7 @@ module.exports = function(grunt) {
           });
           timeout = options.timeout;
           htmlpath = options.source;
+          sendEscapeAfterType = options.sendEscapeAfterType;
 
           async.mapSeries( suites, function( suite, callback ){
             grunt.log.writeln('  Running suite['+suite+']');
