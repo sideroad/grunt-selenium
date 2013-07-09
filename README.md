@@ -109,6 +109,7 @@ The path to save html source, when execute open command
   - goBack
   - goBackAndWait
   - select
+  - selectFrame
   - store
   - storeElementPresent
   - storeEval
