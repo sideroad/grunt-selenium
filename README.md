@@ -55,8 +55,10 @@ grunt.initConfig({
 ```
 
 ### Files property
-Key  : TAP file path 
-Value: suites file path.
+-  src
+ HTML test suite file path or HTML test case file path.
+-  dist
+ TAP file path
 
 ### Options
 
