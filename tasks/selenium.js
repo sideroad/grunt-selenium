@@ -39,7 +39,8 @@ module.exports = function(grunt) {
                 'css': 'css selector',
                 'link': 'link text',
                 'xpath': 'xpath',
-                'name': 'name'
+                'name': 'name',
+                'class': 'class name'
               };
 
           if(map[type]){
@@ -91,7 +92,7 @@ module.exports = function(grunt) {
 
           grunt.log.writeln( '      '+cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
-          if(!pattern.test(actual)) {
+          if(!pattern.test(actual.replace(/(\r|\n)/g, ''))) {
             grunt.log.error('      ['+cmd+'] was failed '+msg+'\n'+
                             '        actual  :'+actual+'\n'+
                             '        expected:'+expected);
