@@ -324,10 +324,15 @@ module.exports = function(grunt) {
         },
         selectFrame: function( target ){
           return this.then(function(){
-            return util.elementBy(target);
-          }).then(function(el){
+            return browser.frame();
+          }).then(function(){
             grunt.log.writeln('      selectFrame['+target+']');
-            return browser.frame(el);
+            if(/^(id=0)|(relative=top)$/.test(target)){
+              target = null;
+            } else {
+              target = target.replace(/^(id=)|(relative=)|(index=)/,'');              
+            }
+            return browser.frame(target);
           }).then(function(){});
         },
         store: function( value , name ){
