@@ -22,6 +22,7 @@ module.exports = function(grunt) {
       storedVars = {},
       timeout,
       sendEscapeAfterType,
+      startURL,
       htmlpath,
       util = {
         elementBy: function(target){
@@ -44,7 +45,16 @@ module.exports = function(grunt) {
               };
 
           if(map[type]){
+            if(type === 'css') {
+              value = value.replace(/\:eq\((\d+)\)/g, function(whole, index){
+                index = Number(index);
+                return ':nth-of-type('+(index+1)+')';
+              });
+            }
+
             type = map[type];
+
+
           } else if(/^\/\//.test(target)){
             value = target;
             type = 'xpath';
@@ -112,8 +122,12 @@ module.exports = function(grunt) {
          */ 
         open: function(url){
           return this.then(function(){
-            grunt.log.writeln('      open['+url+']');
-            return browser.get(url);
+            var target = util.restore(url);
+            if(/^\//.test( target )){
+              target = startURL + target;
+            }
+            grunt.log.writeln('      open['+target+']');
+            return browser.get(target);
           }).then(function(){
             return browser.source();
           }).then(function(html){
@@ -177,7 +191,7 @@ module.exports = function(grunt) {
         },
         assertLocation: function( expected, msg, tap ){
           return this.then(function(){
-            return browser.execute('window.location.href');
+            return browser.safeExecute('window.location.href');
           }).then(function( href ){
             assert.equal('assertLocation', href, expected, msg, tap );
           });
@@ -435,7 +449,7 @@ module.exports = function(grunt) {
         },
         verifyLocation: function( expected, msg, tap ){
           return this.then(function(){
-            return browser.execute('window.location.href');
+            return browser.safeExecute('window.location.href');
           }).then(function( href ){
             assert.equal('verifyLocation', href, expected, msg, tap );
           });
@@ -574,6 +588,7 @@ module.exports = function(grunt) {
           });
           timeout = options.timeout;
           htmlpath = options.source;
+          startURL = options.startURL;
           sendEscapeAfterType = options.sendEscapeAfterType;
 
           async.mapSeries( suites, function( suite, callback ){
