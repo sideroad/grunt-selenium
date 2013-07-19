@@ -276,25 +276,31 @@ module.exports = function(grunt) {
         },
         storeCookieByName: function(cookieName, name){
           return this.then(function(){
+            cookieName = util.restore(cookieName);
+            name = util.restore(name);
             return browser.allCookie();
           }).then(function(cookies){
-            var cookie = _(cookies).where({name:name}) || {};
+            var cookie = _(cookies).where({name:cookieName}) || {};
             storedVars[name] = cookie.value;
             grunt.log.writeln('      storeCookieByName['+cookieName+', '+name+']');
           });
         },
         createCookie: function( pair, options ){
-          var map = {},
-              keyset = pair.split("=");
-
-          map[keyset[0]] = keyset[1];
           return this.then(function(){
+            var map = {},
+                keyset;
+            pair = util.restore(pair);
+            options = util.restore(pair);
+            keyset = pair.split("=");
+
+            map[keyset[0]] = keyset[1];
             grunt.log.writeln('      createCookie['+pair+', '+options+']');            
             return browser.setCookie(map, options);
           }).then(function(){});
         },
         deleteCookie: function( name ){
           return this.then(function(){
+            name = util.restore(name);
             grunt.log.writeln('      deleteCookie['+name+']');            
             return browser.deleteCookie(name);
           }).then(function(){});
@@ -384,6 +390,7 @@ module.exports = function(grunt) {
           return this.then(function(){
             return util.elementBy(target);
           }).then(function( el ){
+            keys = util.restore(keys);
             grunt.log.writeln('      type['+target+', '+keys+']');
             if(sendEscapeAfterType){
               keys += require('wd').SPECIAL_KEYS.Escape;
