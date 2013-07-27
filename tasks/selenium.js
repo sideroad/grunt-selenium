@@ -181,6 +181,8 @@ module.exports = function(grunt) {
             return el.getAttribute(attr);
           }).then(function(value){
             assert.equal('assertAttribute', value, expected, '['+target+']', tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertAttribute', target);
           });
         },
         assertEditable: function( target, msg, tap ){
@@ -190,6 +192,8 @@ module.exports = function(grunt) {
             return el.getAttribute('disabled');
           }).then(function(value){
             assert.ok('assertEditable', !value, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertEditable', target);
           });
         },
         assertNotEditable: function( target, msg, tap ){
@@ -199,6 +203,8 @@ module.exports = function(grunt) {
             return el.getAttribute('disabled');
           }).then(function(value){
             assert.ok('assertNotEditable', value, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertNotEditable', target);
           });
         },
         assertElementPresent: function( target, msg, tap ){
@@ -214,7 +220,9 @@ module.exports = function(grunt) {
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            assert.ok('assertElementPresent', !el, '['+target+']'+msg, tap );
+            assert.ok('assertElementNotPresent', !el, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertElementNotPresent', target);
           });
         },
         assertEval: function( script, expected, tap ){
@@ -238,6 +246,8 @@ module.exports = function(grunt) {
             return el.text();
           }).then(function(text){
             assert.equal('assertText', text, expected, '['+target+']', tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertText', target);
           });
         },
         assertTextPresent: function( expected, msg, tap ){
@@ -268,6 +278,8 @@ module.exports = function(grunt) {
             return el.getValue();
           }).then(function(value){
             assert.equal('assertValue', value, expected, '['+target+']', tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertValue', target);
           });
         },
         captureEntirePageScreenshot: function(filename, options, tap){
@@ -294,7 +306,9 @@ module.exports = function(grunt) {
           }).then(function( el ){
             grunt.log.writeln('      click['+target+']');
             return browser.clickElement(el);
-          }).then(function(){});
+          }).then(function(){}).fail(function(err){
+            assert.elementNotFound('click', target);
+          });
         },
         clickAndWait: function( target ){
           var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
@@ -307,7 +321,9 @@ module.exports = function(grunt) {
             return browser.clickElement(el);
           }).then(function(){
             return browser.waitForCondition('!window.'+token, timeout);
-          }).then(function(){});
+          }).then(function(){}).fail(function(err){
+            assert.elementNotFound('clickAndWait', target);
+          });
         },
         storeCookieByName: function(cookieName, name){
           return this.then(function(){
@@ -382,7 +398,9 @@ module.exports = function(grunt) {
           }).then(function(el){
             grunt.log.writeln('      select['+target+', '+options+']');
             return browser.clickElement(el);
-          }).then(function(){});
+          }).then(function(){}).fail(function(err){
+            assert.elementNotFound('select', target);
+          });
         },
         selectFrame: function( target ){
           return this.then(function(){
@@ -409,6 +427,8 @@ module.exports = function(grunt) {
           }).then(function(el){
             storedVars[name] = el ? true : false;
             grunt.log.writeln('      storeElementPresent['+target+', '+name+']');
+          }).fail(function(err){
+            assert.elementNotFound('storeElementPresent', target);
           });
         },
         storeEval: function( script, name ){
@@ -427,6 +447,8 @@ module.exports = function(grunt) {
           }).then(function(text){
             grunt.log.writeln('      storeText['+target+'] result['+name+']');
             storedVars[name] = text;
+          }).fail(function(err){
+            assert.elementNotFound('storeText', target);
           });
         },
         type: function( target, keys ){
@@ -439,7 +461,9 @@ module.exports = function(grunt) {
               keys += require('wd').SPECIAL_KEYS.Escape;
             }
             return browser.type(el, keys);
-          }).then(function(){});
+          }).then(function(){}).fail(function(err){
+            assert.elementNotFound('type', target);
+          });
         },
         refreshAndWait: function( target ){
           var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
@@ -464,6 +488,8 @@ module.exports = function(grunt) {
             return el.getAttribute(attr);
           }).then(function(value){
             assert.equal('verifyAttribute', value, expected, '['+target+']', tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyAttribute', target);
           });
         },
         verifyEditable: function( target, msg, tap ){
@@ -473,6 +499,8 @@ module.exports = function(grunt) {
             return el.getAttribute('disabled');
           }).then(function(value){
             assert.ok('verifyEditable', !value, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyEditable', target);
           });
         },
         verifyNotEditable: function( target, msg, tap ){
@@ -482,6 +510,8 @@ module.exports = function(grunt) {
             return el.getAttribute('disabled');
           }).then(function(value){
             assert.ok('verifyNotEditable', value, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyNotEditable', target);
           });
         },
         verifyElementPresent: function( target, msg, tap ){
@@ -489,6 +519,8 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function(el){
             assert.ok('verifyElementPresent', el, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyElementPresent', target);
           });
         },
         verifyElementNotPresent: function( target, msg, tap ){
@@ -496,6 +528,8 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function(el){
             assert.ok('verifyElementPresent', !el, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyElementNotPresent', target);
           });
         },
         verifyLocation: function( expected, msg, tap ){
@@ -512,6 +546,8 @@ module.exports = function(grunt) {
             return el.text();
           }).then(function(text){
             assert.equal('verifyText', text, expected, '['+target+']', tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyText', target);
           });
         },
         verifyTextPresent: function( expected, msg, tap ){
@@ -542,6 +578,8 @@ module.exports = function(grunt) {
             return el.getValue();
           }).then(function(value){
             assert.equal('verifyValue', value, expected, '['+target+']', tap );
+          }).fail(function(err){
+            assert.elementNotFound('verifyValue', target);
           });
         },
         waitForElementPresent: function(target){
