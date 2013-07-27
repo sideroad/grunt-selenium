@@ -156,11 +156,12 @@ module.exports = function(grunt) {
           }).then(function(){});
         },
         assertAttribute: function( target, expected, tap ){
-          var sets = target.split("@"),
-              attr = sets[1];
 
-          target = sets[0];
           return this.then(function(){
+            var sets = util.restore(target).split("@"),
+                attr = sets[1];
+
+            target = sets[0];
             return util.elementBy(target);
           }).then(function(el){
             return el.getAttribute(attr);
@@ -218,14 +219,14 @@ module.exports = function(grunt) {
         },
         assertTextPresent: function( expected, msg, tap ){
           return this.then(function(){
-            return browser.textPresent( expected, 'body' );
+            return browser.textPresent( util.restore(expected), 'body' );
           }).then(function( isPresented ){
             assert.ok('assertTextPresent', isPresented, '['+expected+']'+msg, tap );
           });
         },
         assertTextNotPresent: function( expected, msg, tap ){
           return this.then(function(){
-            return browser.textPresent( expected, 'body' );
+            return browser.textPresent( util.restore(expected), 'body' );
           }).then(function( isPresented ){
             assert.ok('assertTextPresent', !isPresented, '['+expected+']'+msg, tap );
           });
@@ -338,7 +339,7 @@ module.exports = function(grunt) {
           }).then(function(el){
             return browser.clickElement(el);
           }).then(function(el){
-            var sets = options.split("="),
+            var sets = util.restore(options).split("="),
                 type = sets[0],
                 value = sets[1];
 
@@ -357,13 +358,14 @@ module.exports = function(grunt) {
           return this.then(function(){
             return browser.frame();
           }).then(function(){
-            grunt.log.writeln('      selectFrame['+target+']');
-            if(/^(id=0)|(relative=top)$/.test(target)){
-              target = null;
+            var frame = util.restore(target);
+            grunt.log.writeln('      selectFrame['+frame+']');
+            if(/^(id=0)|(relative=top)$/.test(frame)){
+              frame = null;
             } else {
-              target = target.replace(/^(id=)|(relative=)|(index=)/,'');              
+              frame = frame.replace(/^(id=)|(relative=)|(index=)/,'');              
             }
-            return browser.frame(target);
+            return browser.frame(frame);
           }).then(function(){});
         },
         store: function( value , name ){
@@ -381,7 +383,7 @@ module.exports = function(grunt) {
         },
         storeEval: function( script, name ){
           return this.then(function(){
-            return browser.safeExecute( script );
+            return browser.safeExecute( util.restore(script) );
           }).then(function( result ){
             grunt.log.writeln('      storeEval['+script+'] result['+result+']');
             storedVars[name] = result;
@@ -421,11 +423,12 @@ module.exports = function(grunt) {
           }).then(function(){});
         },
         verifyAttribute: function( target, expected, tap ){
-          var sets = target.split("@"),
-              attr = sets[1];
 
-          target = sets[0];
           return this.then(function(){
+            var sets = util.restore(target).split("@"),
+                attr = sets[1];
+
+            target = sets[0];
             return util.elementBy(target);
           }).then(function(el){
             return el.getAttribute(attr);
@@ -483,14 +486,14 @@ module.exports = function(grunt) {
         },
         verifyTextPresent: function( expected, msg, tap ){
           return this.then(function(){
-            return browser.textPresent( expected, 'body' );
+            return browser.textPresent( util.restore(expected), 'body' );
           }).then(function( isPresented ){
             assert.ok('verifyTextPresent', isPresented, '['+expected+']'+msg, tap );
           });
         },
         verifyTextNotPresent: function( expected, msg, tap ){
           return this.then(function(){
-            return browser.textPresent( expected, 'body' );
+            return browser.textPresent( util.restore(expected), 'body' );
           }).then(function( isPresented ){
             assert.ok('verifyTextPresent', !isPresented, '['+expected+']'+msg, tap );
           });
