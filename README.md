@@ -100,6 +100,7 @@ Send `Escape` key as `\uE00C` after type command executed.
   - assertNotEditable
   - assertElementPresent
   - assertElementNotPresent
+  - assertEval
   - assertLocation
   - assertText
   - assertTextPresent
@@ -114,6 +115,7 @@ Send `Escape` key as `\uE00C` after type command executed.
   - createCookie
   - deleteCookie
   - echo
+  - getEval
   - goBack
   - goBackAndWait
   - select

@@ -201,6 +201,13 @@ module.exports = function(grunt) {
             assert.ok('assertElementPresent', !el, '['+target+']'+msg, tap );
           });
         },
+        assertEval: function( script, expected, tap ){
+          return this.then(function(){
+            return browser.safeExecute( util.restore(script) );
+          }).then(function( result ){
+            assert.equal('assertLocation', result, expected, '['+script+']', tap );
+          });
+        },
         assertLocation: function( expected, msg, tap ){
           return this.then(function(){
             return browser.safeExecute('window.location.href');
@@ -320,6 +327,13 @@ module.exports = function(grunt) {
         echo: function( value ){
           grunt.log.writeln('      echo['+ util.restore(value)+']');
           return this;
+        },
+        getEval: function( script ){
+          return this.then(function(){
+            return browser.safeExecute( util.restore(script) );
+          }).then(function( result ){
+            grunt.log.writeln('      getEval['+script+', '+result+']');
+          });
         },
         goBack: function(){
           return this.then(function(){
