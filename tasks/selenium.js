@@ -90,17 +90,20 @@ module.exports = function(grunt) {
       },
       assert = {
         ok: function( cmd, actual, msg, tap){
-          var is = 'ok';
+          var is = 'ok',
+              failed = '';
           grunt.log.writeln('      '+ cmd + ': "' + actual + '" is ok? ' + msg );
           if(!actual){
-            grunt.log.error('      ['+cmd+'] was failed '+msg );
+            failed = '\n'+
+                     '      ['+cmd+'] was failed '+msg;
+            grunt.log.error(failed);
             isSuccess = false;
             is = 'not ok';
             tap.fail++;
           } else {
             tap.pass++;
           }
-          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] ');
+          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] '+failed);
           tap.index++;
         },
         equal: function(cmd, actual, expected, msg, tap){
@@ -113,9 +116,10 @@ module.exports = function(grunt) {
           grunt.log.writeln( '      '+cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
           if(!pattern.test(actual.replace(/(\r|\n)/g, ''))) {
-            failed = '\n      ['+cmd+'] was failed '+msg+'\n'+
-                            '        actual  :'+actual+'\n'+
-                            '        expected:'+expected;
+            failed = '\n'+
+                     '      ['+cmd+'] was failed '+msg+'\n'+
+                     '        actual  :'+actual+'\n'+
+                     '        expected:'+expected;
             grunt.log.error(failed);
             isSuccess = false;
             is = 'not ok';
@@ -124,6 +128,16 @@ module.exports = function(grunt) {
             tap.pass++;
           }
           tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] '+failed);
+          tap.index++;
+        },
+        elementNotFound: function(cmd, target){
+          var failed = '\n'+
+                       '      ['+cmd+'] was failed\n'+
+                       '        Element was not exists. ['+target+']';
+          grunt.log.error(failed);
+          isSuccess = false;
+          tap.fail++;
+          tap.data.push( 'not ok ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] '+failed);
           tap.index++;
         }
       },
@@ -192,6 +206,8 @@ module.exports = function(grunt) {
             return util.elementBy(target);
           }).then(function(el){
             assert.ok('assertElementPresent', el, '['+target+']'+msg, tap );
+          }).fail(function(err){
+            assert.elementNotFound('assertElementPresent', target);
           });
         },
         assertElementNotPresent: function( target, msg, tap ){
@@ -723,6 +739,9 @@ module.exports = function(grunt) {
                             return this;
                           }
                         ).apply( promise, [ target, value, tap ] );
+                        promise.fail(function(err){
+                          callback(promise);
+                        });
                       });
                       promise = promise.then(function(){
                         grunt.log.writeln('    Finish  test case['+testcase+']');
@@ -735,12 +754,18 @@ module.exports = function(grunt) {
                     storedVars = {};
                     grunt.log.writeln('  Finish suite['+suite+']');
                     callback();
+                  },function(err){
+                    grunt.log.error(err);
+                    callback();
                   });
                 });
               }
             });
           }, function(){
             promise = promise.then(function(){
+              grunt.log.writeln('Teardown browser ['+browserName+']');
+              return browser.quit();
+            },function(){
               grunt.log.writeln('Teardown browser ['+browserName+']');
               return browser.quit();
             }).fin(function(){

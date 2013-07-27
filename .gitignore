@@ -3,7 +3,7 @@
 .gitignore
 .jshintrc
 .npmignore
-.project
 node_modules
 chromedriver.log
 npm-debug.log
+libpeerconnection.log
