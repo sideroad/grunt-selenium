@@ -15,6 +15,7 @@ module.exports = function(grunt) {
       path = require('path'),
       fs = require('fs'),
       _ = require('lodash'),
+      webdriver = require('wd/lib/webdriver'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.33.0.jar',
       browser,
@@ -77,6 +78,14 @@ module.exports = function(grunt) {
         waitForVisible: function(target){
           var location = this.location(target);
           return browser.waitForVisible( location.type, location.value, timeout );
+        },
+        waitForNoElement: function(target){
+          var location = this.location(target);
+          return browser.waitForNoElement( location.type, location.value, timeout );
+        },
+        waitForNotVisible: function(target){
+          var location = this.location(target);
+          return browser.waitForNotVisible( location.type, location.value, timeout );
         }
       },
       assert = {
@@ -91,28 +100,30 @@ module.exports = function(grunt) {
           } else {
             tap.pass++;
           }
-          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg);
+          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] ');
           tap.index++;
         },
         equal: function(cmd, actual, expected, msg, tap){
           var pattern,
-              is = 'ok';
+              is = 'ok',
+              failed = '';
           expected = util.restore(expected);
           pattern = new RegExp("^"+(expected.replace(/(\.|\:|\?|\^|\{|\}|\(|\))/g,"\\$1").replace(/\*/g,".*"))+"$");
 
           grunt.log.writeln( '      '+cmd + ': "' + actual + '" is equal "' + expected + '"? ' + msg );
 
           if(!pattern.test(actual.replace(/(\r|\n)/g, ''))) {
-            grunt.log.error('      ['+cmd+'] was failed '+msg+'\n'+
+            failed = '\n      ['+cmd+'] was failed '+msg+'\n'+
                             '        actual  :'+actual+'\n'+
-                            '        expected:'+expected);
+                            '        expected:'+expected;
+            grunt.log.error(failed);
             isSuccess = false;
             is = 'not ok';
             tap.fail++;
           } else {
             tap.pass++;
           }
-          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg);
+          tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] '+failed);
           tap.index++;
         }
       },
@@ -511,6 +522,18 @@ module.exports = function(grunt) {
             grunt.log.debug('      waitForVisible: ' + target );
             return util.waitForVisible(target);
           }).then(function(){});
+        },
+        waitForElementNotPresent: function(target){
+          return this.then(function(){
+            grunt.log.debug('      waitForElementNotPresent: ' + target );
+            return util.waitForNoElement(target);
+          }).then(function(){});
+        },
+        waitForNotVisible: function(target){
+          return this.then(function(){
+            grunt.log.debug('      waitForVisible: ' + target );
+            return util.waitForNotVisible(target);
+          }).then(function(){});
         }
       },
       key,
@@ -531,6 +554,56 @@ module.exports = function(grunt) {
                       process.platform === 'linux'  && (process.config.variables.host_arch === 'x32') ? '-Dwebdriver.chrome.driver='+ base + path.sep + 'linux32.chromedriver' : '');
         return ' '+options.join(' ');
       };
+
+  // monkey patching
+  webdriver.prototype.waitForNoElement = function(using, value, timeout, cb){
+    var _this = this;
+    var endTime = Date.now() + timeout;
+
+    var poll = function(){
+      _this.hasElement(using, value, function(err, isHere){
+        if(err){
+          return cb(err);
+        }
+
+        if(isHere){
+          if(Date.now() > endTime){
+            cb(new Error("Element didn't disappear"));
+          } else {
+            setTimeout(poll, 200);
+          }
+        } else {
+          cb(null);
+        }
+      });
+    };
+
+    poll();
+  };
+  webdriver.prototype.waitForNotVisible = function(using, value, timeout, cb) {
+    var _this = this;
+    var endTime = Date.now() + timeout;
+
+    var poll = function(){
+      _this.isVisible(using, value, function(err, visible) {
+        if (err) {
+          return cb(err);
+        }
+
+        if (visible) {
+          if (Date.now() > endTime) {
+            cb(new Error("Element didn't become visible"));
+          } else {
+            setTimeout(poll, 200);
+          }
+        } else {
+          cb(null);
+        }
+      });
+    };
+    poll();
+  };
+
 
   for(key in cmd){
     supportedCmds.push(key);
