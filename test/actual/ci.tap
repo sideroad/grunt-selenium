@@ -1,12 +1,16 @@
 TAP version 13
-ok 1 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
-ok 2 - phantomjs - assertText [css=span.post-title] [Setup Grunt on Jenkins] 
-ok 3 - phantomjs - assertTitle  [jQuery Plugins] 
-ok 4 - phantomjs - assertText [css=span.post-title] [jQuery Text Animation] 
-ok 5 - phantomjs - assertTextPresent [sideroad] [true] 
-ok 6 - phantomjs - assertTitle  [sideroad - Rich Web Application Development] 
+not ok 1 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+      [assertTitle] was failed 
+        actual  :sideroad (sideroad) · GitHub
+        expected:sideroad (sideroad) · GitHub - SUPERB!
+ok 2 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 3 - phantomjs - assertText [css=span.post-title] [Setup Grunt on Jenkins] 
+ok 4 - phantomjs - assertTitle  [jQuery Plugins] 
+ok 5 - phantomjs - assertText [css=span.post-title] [jQuery Text Animation] 
+ok 6 - phantomjs - assertTextPresent [sideroad] [true] 
+ok 7 - phantomjs - assertTitle  [sideroad - Rich Web Application Development] 
 
-1..6
-# tests 6
+1..7
+# tests 7
 # pass 6
-# fail 0
+# fail 1
