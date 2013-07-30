@@ -690,7 +690,13 @@ module.exports = function(grunt) {
         }),
         done = this.async(),
         child,
-        that = this;
+        log = options.log,
+        that = this,
+        logging = log ? function(data){
+          data = ''+data;
+          grunt.log.debug(data.replace(/\n$/,''));
+          fs.appendFileSync(log, data);
+        } : function(){};
 
     isSuccess = true;
 
@@ -700,12 +706,12 @@ module.exports = function(grunt) {
     child = spawn('java -jar ' + seleniumjar + getDriverOptions());
 
     child.stderr.on('data', function(data){
-      grunt.log.debug(''+data);
+      logging(data);
     });
 
     child.stdout.on('data', function(data){
-      data = (''+data).replace(/\n$/,'');
-      grunt.log.debug(data);
+      data = ''+data;
+      logging(data);
       if( !data.match('Started org.openqa.jetty.jetty.Server') ) {
         return;
       }

@@ -17,7 +17,8 @@ module.exports = function(grunt) {
     selenium: {
       options: {
         startURL : 'http://sideroad.secret.jp/',
-        browsers: ['firefox', 'chrome']
+        browsers: ['firefox', 'chrome'],
+        log: 'test/actual/wd.log'
       },
       success: {
         files: {
@@ -62,6 +63,6 @@ module.exports = function(grunt) {
   // By default, lint and run all tests.
   grunt.registerTask('test', ['clean', 'selenium', 'nodeunit']);
   grunt.registerTask('ci', ['clean', 'selenium:ci', 'nodeunit:ci']);
-  grunt.registerTask('default', ['selenium']);
+  grunt.registerTask('default', ['clean', 'selenium']);
 
 };
