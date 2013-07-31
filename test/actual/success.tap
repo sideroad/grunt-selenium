@@ -1,0 +1,18 @@
+TAP version 13
+ok 1 - firefox - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 2 - firefox - assertText [css=span.post-title] [Setup Grunt on Jenkins] 
+ok 3 - firefox - assertTitle  [jQuery Plugins] 
+ok 4 - firefox - assertText [css=span.post-title] [jQuery Text Animation] 
+ok 5 - firefox - assertTextPresent [sideroad] [true] 
+ok 6 - firefox - assertTitle  [sideroad - Rich Web Application Development] 
+ok 7 - chrome - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 8 - chrome - assertText [css=span.post-title] [Setup Grunt on Jenkins] 
+ok 9 - chrome - assertTitle  [jQuery Plugins] 
+ok 10 - chrome - assertText [css=span.post-title] [jQuery Text Animation] 
+ok 11 - chrome - assertTextPresent [sideroad] [true] 
+ok 12 - chrome - assertTitle  [sideroad - Rich Web Application Development] 
+
+1..12
+# tests 12
+# pass 12
+# fail 0

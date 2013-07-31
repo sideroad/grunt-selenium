@@ -27,7 +27,9 @@ module.exports = function(grunt) {
       htmlpath,
       util = {
         elementBy: function(target){
-          var location = this.location(target);
+          var location;
+          target = util.restore(target);
+          location = this.location(target);
           grunt.log.debug('elementBy: ' + target );
           return browser.element( location.type, location.value );
         },
@@ -130,14 +132,14 @@ module.exports = function(grunt) {
           tap.data.push( is + ' ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] '+failed);
           tap.index++;
         },
-        elementNotFound: function(cmd, target){
+        elementNotFound: function(cmd, target, tap){
           var failed = '\n'+
                        '      ['+cmd+'] was failed\n'+
                        '        Element was not exists. ['+target+']';
           grunt.log.error(failed);
           isSuccess = false;
           tap.fail++;
-          tap.data.push( 'not ok ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' + msg + ' [' + actual + '] '+failed);
+          tap.data.push( 'not ok ' + tap.index + ' - ' + tap.name + ' - ' + cmd + ' ' +failed);
           tap.index++;
         }
       },

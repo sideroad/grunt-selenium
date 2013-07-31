@@ -7,3 +7,4 @@ node_modules
 chromedriver.log
 npm-debug.log
 libpeerconnection.log
+wd.log
