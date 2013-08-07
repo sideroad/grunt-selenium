@@ -7,7 +7,7 @@
 
 		$("#generate-element").click(function(){
 			setTimeout(function(){
-				$("<span class='generatted-span'></span>").appendTo(document.body);
+				$("<span class='generatted-span'>Generatted</span>").appendTo(document.body);
 			},1000);
 		});
 
