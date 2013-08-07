@@ -1,0 +1,14 @@
+(function($){
+	$(function(){
+		$("#name").change(function(){
+			$("#name-hidden").val(this.value);
+			$("#name-span").text(this.value);
+		});
+
+		$("#generate-element").click(function(){
+			setTimeout(function(){
+				$("<span class='generatted-span'></span>").appendTo(document.body);
+			},1000);
+		});
+	});
+})(jQuery);

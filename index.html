@@ -2,11 +2,16 @@
 <html>
 <head>
 	<title>Test app</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 </head>
 <body>
-	<form method="get" action="b.html">
+	<form method="get" action="submitted.html">
 		<input id="name" name="name" type="text" value="" >
-		<input type="submit" value="Submit">
+		<input id="name-hidden" type="hidden" value="" >
+		<span id="name-span"></span>
+		<input id="generate-element" type="button">
+		<input id="submit" type="submit" value="Submit">
 	</form>
+	<script type="text/javascript" src="fixture.js" ></script>
 </body>
 </html>
