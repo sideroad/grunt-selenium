@@ -10,5 +10,11 @@
 				$("<span class='generatted-span'></span>").appendTo(document.body);
 			},1000);
 		});
+
+		$("#delete-element").click(function(){
+			setTimeout(function(){
+				$("#delete-target").remove();
+			}, 1000);
+		});
 	});
 })(jQuery);
