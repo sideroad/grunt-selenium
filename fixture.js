@@ -24,5 +24,11 @@
 		$("#prompt").click(function(){
 			prompt("Input something");
 		});
+
+		$("#toggle").click(function(){
+			setTimeout(function(){
+				$("#toggled-target").toggle();
+			}, 1000);
+		});
 	});
 })(jQuery);
