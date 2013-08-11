@@ -16,5 +16,13 @@
 				$("#delete-target").remove();
 			}, 1000);
 		});
+
+		$("#alert").click(function(){
+			alert("Alert!");
+		});
+
+		$("#prompt").click(function(){
+			prompt("Input something");
+		});
 	});
 })(jQuery);
