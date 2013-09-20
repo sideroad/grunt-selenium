@@ -1,16 +1,49 @@
 TAP version 13
-not ok 1 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
-      [assertTitle] was failed 
-        actual  :sideroad (sideroad) · GitHub
-        expected:sideroad (sideroad) · GitHub - SUPERB!
-ok 2 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
-ok 3 - phantomjs - assertText [css=span.post-title] [Setup Grunt on Jenkins] 
+ok 1 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 2 - phantomjs - assertText [css=span.post-title] [Setup Grunt on Jenkins] 
+not ok 3 - phantomjs - clickAndWait 
+      [clickAndWait] was failed
+        Element was not exists. [link=Plugins]
 ok 4 - phantomjs - assertTitle  [jQuery Plugins] 
 ok 5 - phantomjs - assertText [css=span.post-title] [jQuery Text Animation] 
 ok 6 - phantomjs - assertTextPresent [sideroad] [true] 
 ok 7 - phantomjs - assertTitle  [sideroad - Rich Web Application Development] 
+ok 8 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 9 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+not ok 10 - phantomjs - assertAlert 
+      [assertAlert] was failed
+ok 11 - phantomjs - assertAttribute [submit] [Submit] 
+ok 12 - phantomjs - assertEditable [submit] [true] 
+ok 13 - phantomjs - assertNotEditable [disabled] [true] 
+ok 14 - phantomjs - assertElementPresent [name] [10] 
+ok 15 - phantomjs - assertElementNotPresent [not-exists] [true] 
+ok 16 - phantomjs - assertEval [1+1] [2] 
+ok 17 - phantomjs - assertEval [1+1] [2] 
+ok 18 - phantomjs - assertText [span-for-text-assertion] [For Text Assertion!] 
+ok 19 - phantomjs - assertTextPresent [For Text Assertion!] [true] 
+ok 20 - phantomjs - assertTextPresent [${textAssertion}] [true] 
+ok 21 - phantomjs - assertTextPresent [For Text Assertion! Not Exists!] [true] 
+ok 22 - phantomjs - assertTextPresent [${textNotAssertion}] [true] 
+ok 23 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+ok 24 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+ok 25 - phantomjs - assertValue [submit] [Submit] 
+ok 26 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/submitted.html?name=Amber] 
+ok 27 - phantomjs - assertTitle  [Submitted!!] 
+ok 28 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 29 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+ok 30 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 31 - phantomjs - assertExpression [${existsElement}] [true] 
+ok 32 - phantomjs - assertExpression [${notExistsElement}] [false] 
+ok 33 - phantomjs - assertExpression [${three}] [3] 
+ok 34 - phantomjs - assertExpression [${name}] [Sapphire] 
+ok 35 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 36 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+not ok 37 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+      [assertTitle] was failed 
+        actual  :sideroad (sideroad) · GitHub
+        expected:sideroad (sideroad) · GitHub - SUPERB!
 
-1..7
-# tests 7
-# pass 6
-# fail 1
+1..37
+# tests 37
+# pass 34
+# fail 3

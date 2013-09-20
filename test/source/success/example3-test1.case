@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://sideroad.github.io/grunt-selenium/" />
+<title>example3-test1</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">example3-test1</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>http://sideroad.github.io/grunt-selenium/</td>
+	<td>url</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>Submit</td>
+	<td>submitValue</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>Grunt Selenium Test Page</td>
+	<td>title</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>2</td>
+	<td>two</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>For Text Assertion!</td>
+	<td>textAssertion</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>For Text Assertion! Not Exists!</td>
+	<td>textNotAssertion</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>Amber</td>
+	<td>name</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>${url}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>${url}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/grunt-selenium/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>${url}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>Alert!</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAttribute</td>
+	<td>submit@value</td>
+	<td>${submitValue}</td>
+</tr>
+<tr>
+	<td>assertEditable</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotEditable</td>
+	<td>disabled</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>not-exists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>1+1</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>1+1</td>
+	<td>${two}</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>span-for-text-assertion</td>
+	<td>For Text Assertion!</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>For Text Assertion!</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>${textAssertion}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>For Text Assertion! Not Exists!</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>${textNotAssertion}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Grunt Selenium Test Page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>${title}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>submit</td>
+	<td>${submitValue}</td>
+</tr>
+<!-- <tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>select</td>
+	<td>b</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>select</td>
+	<td>value=3</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>3</td>
+</tr>
+ -->
+ <tr>
+	<td>type</td>
+	<td>name</td>
+	<td>${name}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>http://sideroad.github.io/grunt-selenium/submitted.html?name=Amber</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Submitted!!</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBackAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>${url}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>${title}</td>
+	<td></td>
+</tr>
+<!-- <tr>
+	<td>select</td>
+	<td>select</td>
+	<td>label=a</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>select</td>
+	<td>value=2</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>select</td>
+	<td>id=C</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>select</td>
+	<td>index=0</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>select</td>
+	<td>1</td>
+</tr>
+ --><tr>
+	<td>selectFrame</td>
+	<td>id=child-iframe</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=h1</td>
+	<td>This is for selectFrame assertion</td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>relative=top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>name</td>
+	<td>existsElement</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${existsElement}</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>not-exists</td>
+	<td>notExistsElement</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${notExistsElement}</td>
+	<td>false</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>1+1+1</td>
+	<td>three</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${three}</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Sapphire</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>name-span</td>
+	<td>name</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${name}</td>
+	<td>Sapphire</td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>${url}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>${title}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name-span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>generate-element</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=.generatted-span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>not-exists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>delete-element</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>id=delete-target</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>toggle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>toggled-target</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>toggle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>toggled-target</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

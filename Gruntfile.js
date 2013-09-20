@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     selenium: {
       options: {
-        startURL : 'http://sideroad.secret.jp/',
+        startURL : 'http://sideroad.github.io/grunt-selenium/',
         browsers: ['firefox', 'chrome'],
         log: 'test/actual/wd.log'
       },
@@ -35,12 +35,11 @@ module.exports = function(grunt) {
       },
       ci: {
         options: {
-          startURL : 'http://sideroad.secret.jp/',
           browsers: ['phantomjs'],
           force: true
         },
         files: {
-         'test/actual/ci.tap': ['test/source/**/*.suite']
+         'test/actual/ci.tap': ['test/source/success/*.suite', 'test/source/failed/*.suite']
         }
       }
     },
