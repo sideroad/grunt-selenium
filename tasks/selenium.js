@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       _ = require('lodash'),
       webdriver = require('wd/lib/webdriver'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
-      seleniumjar = __dirname+'/lib/selenium-server-standalone-2.33.0.jar',
+      seleniumjar = __dirname+'/lib/selenium-server-standalone-2.35.0.jar',
       browser,
       isSuccess = true,
       storedVars = {},

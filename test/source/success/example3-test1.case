@@ -66,6 +66,7 @@
 	<td>${url}</td>
 	<td></td>
 </tr>
+<!-- 
 <tr>
 	<td>click</td>
 	<td>alert</td>
@@ -76,7 +77,8 @@
 	<td>Alert!</td>
 	<td></td>
 </tr>
-<tr>
+ -->
+ <tr>
 	<td>assertAttribute</td>
 	<td>submit@value</td>
 	<td>${submitValue}</td>
