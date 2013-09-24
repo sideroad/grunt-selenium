@@ -410,6 +410,18 @@ module.exports = function(grunt) {
           grunt.log.writeln('      echo['+ util.restore(value)+']');
           return this;
         },
+        fireEvent: function(target, eventName, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return browser.execute( "arguments[0]."+eventName+"()", [{ELEMENT: el.value}] );
+          }).then(function(){
+            grunt.log.writeln('      fireEvent['+ util.restore(target)+', '+eventName+']');
+          }).fail(function(err){
+            grunt.log.error('[wd]'+err);
+            assert.failed('fireEvent ['+target+'] ['+eventName+']', tap);
+          });
+        },
         getEval: function( script ){
           return this.then(function(){
             return browser.safeExecute( util.restore(script) );
@@ -438,7 +450,7 @@ module.exports = function(grunt) {
                 type = sets[0],
                 value = sets[1];
 
-            return el.element('css selector', {
+            return browser.next('element', el, 'css selector', {
               'label': '[option="'+value+'"]',
               'value': '[value="'+value+'"]',
               'id': '[id="'+value+'"]',
@@ -520,7 +532,7 @@ module.exports = function(grunt) {
           }).then(function(el){
             return el.text();
           }).then(function(text){
-            grunt.log.writeln('      storeText['+target+'] result['+text+']');
+            grunt.log.writeln('      storeText['+target+'] variable['+name+'] result['+text+']');
             storedVars[name] = text;
           }).fail(function(err){
             grunt.log.error('[wd]'+err);
@@ -535,17 +547,14 @@ module.exports = function(grunt) {
             elem = el;
             return browser.clear( el );
           }).then(function(){
+            return browser.execute( "arguments[0].focus()", [{ELEMENT: elem.value}] );
+          }).then(function(){
             keys = util.restore(keys);
             grunt.log.writeln('      type['+target+', '+keys+']');
             return browser.type(elem, keys);
           }).then(function(){
-            var esc = '',
-                SK = require('wd').SPECIAL_KEYS;
-
-            if(sendEscapeAfterType){
-              esc += SK.Escape + SK.Tab;
-            }
-            return browser.type(elem, esc);
+            return browser.execute( "arguments[0].blur()", [{ELEMENT: elem.value}] );
+          }).then(function(){
           }).fail(function(err){
             assert.elementNotFound('type', target, tap);
           });

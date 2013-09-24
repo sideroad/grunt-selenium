@@ -93,7 +93,6 @@ Default value: `true`
 Send `Escape` key as `\uE00C` after type command executed.
 
 ## Supported Selenium IDE commands
-  - open
   - assertAlert
   - assertAttribute
   - assertEditable
@@ -101,6 +100,7 @@ Send `Escape` key as `\uE00C` after type command executed.
   - assertElementPresent
   - assertElementNotPresent
   - assertEval
+  - assertExpression
   - assertLocation
   - assertText
   - assertTextPresent
@@ -115,11 +115,13 @@ Send `Escape` key as `\uE00C` after type command executed.
   - createCookie
   - deleteCookie
   - echo
+  - fireEvent
   - getEval
   - goBack
   - goBackAndWait
   - select
   - selectFrame
+  - sendKeys
   - store
   - storeElementPresent
   - storeEval

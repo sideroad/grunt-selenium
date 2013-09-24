@@ -153,11 +153,12 @@
 	<td>submit</td>
 	<td>${submitValue}</td>
 </tr>
-<!-- <tr>
+<tr>
 	<td>assertValue</td>
 	<td>select</td>
 	<td>1</td>
 </tr>
+<!-- 
 <tr>
 	<td>select</td>
 	<td>select</td>
@@ -376,6 +377,16 @@
 </tr>
 <tr>
 	<td>waitForVisible</td>
+	<td>toggled-target</td>
+	<td></td>
+</tr>
+<tr>
+	<td>fireEvent</td>
+	<td>toggle</td>
+	<td>click</td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
 	<td>toggled-target</td>
 	<td></td>
 </tr>
