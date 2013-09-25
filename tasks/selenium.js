@@ -19,6 +19,7 @@ module.exports = function(grunt) {
       webdriver = require('wd/lib/webdriver'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.35.0.jar',
+      fireEvents = fs.readFileSync( path.join( __dirname, '/lib/fire-events.js'), 'utf8').toString(),
       browser,
       isSuccess = true,
       storedVars = {},
@@ -414,7 +415,7 @@ module.exports = function(grunt) {
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            return browser.execute( "arguments[0]."+eventName+"()", [{ELEMENT: el.value}] );
+            return browser.execute( fireEvents, [{ELEMENT: el.value}, eventName] );
           }).then(function(){
             grunt.log.writeln('      fireEvent['+ util.restore(target)+', '+eventName+']');
           }).fail(function(err){
@@ -449,8 +450,7 @@ module.exports = function(grunt) {
             var sets = util.restore(options).split("="),
                 type = sets[0],
                 value = sets[1];
-
-            return browser.next('element', el, 'css selector', {
+            return el.element('css selector', {
               'label': '[option="'+value+'"]',
               'value': '[value="'+value+'"]',
               'id': '[id="'+value+'"]',
@@ -547,13 +547,13 @@ module.exports = function(grunt) {
             elem = el;
             return browser.clear( el );
           }).then(function(){
-            return browser.execute( "arguments[0].focus()", [{ELEMENT: elem.value}] );
+            return browser.execute( fireEvents, [{ELEMENT: elem.value}, 'focus'] );
           }).then(function(){
             keys = util.restore(keys);
             grunt.log.writeln('      type['+target+', '+keys+']');
             return browser.type(elem, keys);
           }).then(function(){
-            return browser.execute( "arguments[0].blur()", [{ELEMENT: elem.value}] );
+            return browser.execute( fireEvents, [{ELEMENT: elem.value}, 'change'] );
           }).then(function(){
           }).fail(function(err){
             assert.elementNotFound('type', target, tap);
