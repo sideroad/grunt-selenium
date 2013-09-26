@@ -34,18 +34,23 @@ ok 32 - phantomjs - assertValue [select] [2]
 ok 33 - phantomjs - assertValue [select] [3] 
 ok 34 - phantomjs - assertValue [select] [1] 
 ok 35 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
-ok 36 - phantomjs - assertExpression [${existsElement}] [true] 
-ok 37 - phantomjs - assertExpression [${notExistsElement}] [false] 
-ok 38 - phantomjs - assertExpression [${three}] [3] 
-ok 39 - phantomjs - assertExpression [${name}] [Sapphire] 
-ok 40 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
-ok 41 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
-not ok 42 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 36 - phantomjs - assertElementNotPresent [css=h1] [true] 
+ok 37 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 38 - phantomjs - assertElementNotPresent [css=h1] [true] 
+ok 39 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 40 - phantomjs - assertElementNotPresent [css=h1] [true] 
+ok 41 - phantomjs - assertExpression [${existsElement}] [true] 
+ok 42 - phantomjs - assertExpression [${notExistsElement}] [false] 
+ok 43 - phantomjs - assertExpression [${three}] [3] 
+ok 44 - phantomjs - assertExpression [${name}] [Sapphire] 
+ok 45 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 46 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+not ok 47 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
       [assertTitle] was failed 
         actual  :sideroad (sideroad) · GitHub
         expected:sideroad (sideroad) · GitHub - SUPERB!
 
-1..42
-# tests 42
-# pass 41
+1..47
+# tests 47
+# pass 46
 # fail 1

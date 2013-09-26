@@ -22,6 +22,7 @@ module.exports = function(grunt) {
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.35.0.jar',
       fireEvents = fs.readFileSync( path.join( __dirname, '/lib/fire-events.js'), 'utf8').toString(),
       searchOption = fs.readFileSync( path.join( __dirname, '/lib/search-option.js'), 'utf8').toString(),
+      searchIframe = fs.readFileSync( path.join( __dirname, '/lib/search-iframe.js'), 'utf8').toString(),
       browser,
       isSuccess = true,
       storedVars = {},
@@ -481,14 +482,24 @@ module.exports = function(grunt) {
           return this.then(function(){
             return browser.frame();
           }).then(function(){
-            var frame = util.restore(target);
+            var deferred = Q.defer(),
+                frame = util.restore(target),
+                sets = frame.split("="),
+                type = sets[0],
+                value = sets[1];
+
             grunt.log.writeln('      selectFrame['+frame+']');
-            if(/^(id=0)|(relative=top)$/.test(frame)){
-              frame = null;
+
+            if(/^(index=0)|(relative=top)|(relative=parent)$/.test(frame)){
+              deferred.resolve(null);
+            } else if(type === 'id'){
+              browser.elementById(value, deferred.makeNodeResolver());
             } else {
-              frame = frame.replace(/^(id=)|(relative=)/,'');              
+              browser.execute(searchIframe, [type, value], deferred.makeNodeResolver());
             }
-            return browser.frame(frame);
+            return deferred.promise;
+          }).then(function(el){
+            return browser.frame(el);
           }).then(function(){
           }).fail(function(err){
             grunt.log.error('[wd]'+err);

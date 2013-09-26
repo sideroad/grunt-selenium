@@ -1,4 +1,3 @@
-
 var options = arguments[0].getElementsByTagName('option') || [],
     text = String( arguments[1] ),
     i,
