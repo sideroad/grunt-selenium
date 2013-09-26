@@ -158,7 +158,6 @@
 	<td>select</td>
 	<td>1</td>
 </tr>
-<!-- 
 <tr>
 	<td>select</td>
 	<td>select</td>
@@ -179,8 +178,7 @@
 	<td>select</td>
 	<td>3</td>
 </tr>
- -->
- <tr>
+<tr>
 	<td>type</td>
 	<td>name</td>
 	<td>${name}</td>
@@ -215,7 +213,7 @@
 	<td>${title}</td>
 	<td></td>
 </tr>
-<!-- <tr>
+<tr>
 	<td>select</td>
 	<td>select</td>
 	<td>label=a</td>
@@ -255,7 +253,7 @@
 	<td>select</td>
 	<td>1</td>
 </tr>
- --><tr>
+<tr>
 	<td>selectFrame</td>
 	<td>id=child-iframe</td>
 	<td></td>

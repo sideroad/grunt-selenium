@@ -23,23 +23,29 @@ ok 21 - phantomjs - assertTitle  [Grunt Selenium Test Page]
 ok 22 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
 ok 23 - phantomjs - assertValue [submit] [Submit] 
 ok 24 - phantomjs - assertValue [select] [1] 
-ok 25 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/submitted.html?name=Amber] 
-ok 26 - phantomjs - assertTitle  [Submitted!!] 
-ok 27 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
-ok 28 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
-ok 29 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
-ok 30 - phantomjs - assertExpression [${existsElement}] [true] 
-ok 31 - phantomjs - assertExpression [${notExistsElement}] [false] 
-ok 32 - phantomjs - assertExpression [${three}] [3] 
-ok 33 - phantomjs - assertExpression [${name}] [Sapphire] 
-ok 34 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
-ok 35 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
-not ok 36 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 25 - phantomjs - assertValue [select] [2] 
+ok 26 - phantomjs - assertValue [select] [3] 
+ok 27 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/submitted.html?name=Amber] 
+ok 28 - phantomjs - assertTitle  [Submitted!!] 
+ok 29 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 30 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+ok 31 - phantomjs - assertValue [select] [1] 
+ok 32 - phantomjs - assertValue [select] [2] 
+ok 33 - phantomjs - assertValue [select] [3] 
+ok 34 - phantomjs - assertValue [select] [1] 
+ok 35 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 36 - phantomjs - assertExpression [${existsElement}] [true] 
+ok 37 - phantomjs - assertExpression [${notExistsElement}] [false] 
+ok 38 - phantomjs - assertExpression [${three}] [3] 
+ok 39 - phantomjs - assertExpression [${name}] [Sapphire] 
+ok 40 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 41 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+not ok 42 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
       [assertTitle] was failed 
         actual  :sideroad (sideroad) · GitHub
         expected:sideroad (sideroad) · GitHub - SUPERB!
 
-1..36
-# tests 36
-# pass 35
+1..42
+# tests 42
+# pass 41
 # fail 1

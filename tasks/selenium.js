@@ -16,10 +16,12 @@ module.exports = function(grunt) {
       url = require('url'),
       fs = require('fs'),
       _ = require('lodash'),
+      Q = require('q'),
       webdriver = require('wd/lib/webdriver'),
       jquery = fs.readFileSync( path.join( __dirname, '/lib/jquery-1.9.1.min.js' ), 'utf8').toString(),
       seleniumjar = __dirname+'/lib/selenium-server-standalone-2.35.0.jar',
       fireEvents = fs.readFileSync( path.join( __dirname, '/lib/fire-events.js'), 'utf8').toString(),
+      searchOption = fs.readFileSync( path.join( __dirname, '/lib/search-option.js'), 'utf8').toString(),
       browser,
       isSuccess = true,
       storedVars = {},
@@ -447,15 +449,25 @@ module.exports = function(grunt) {
           return this.then(function(){
             return util.elementBy(target);
           }).then(function(el){
-            var sets = util.restore(options).split("="),
+            var deferred = Q.defer(),
+                sets = util.restore(options).split("="),
                 type = sets[0],
                 value = sets[1];
-            return el.element('css selector', {
-              'label': '[option="'+value+'"]',
+            
+            value = {
               'value': '[value="'+value+'"]',
               'id': '[id="'+value+'"]',
-              'index': ':eq('+value+')'
-            }[type]||'[value="'+util.restore(options)+'"]');
+              'index': ':nth-of-type('+(Number(value)+1)+')'
+            }[type];
+
+            if(value){
+              el.element('css selector', value, deferred.makeNodeResolver());              
+            } else {
+              value = sets[1] || type;
+              browser.execute(searchOption, [{ELEMENT: el.value}, value], deferred.makeNodeResolver());
+            }
+
+            return deferred.promise;
           }).then(function(el){
             grunt.log.writeln('      select['+target+', '+options+']');
             return browser.clickElement(el);
