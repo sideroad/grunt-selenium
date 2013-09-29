@@ -95,60 +95,73 @@ A JSON object describing a Proxy configuration
 ## Supported Selenium IDE commands
   - assertAlert
   - assertAttribute
+  - assertChecked
   - assertEditable
-  - assertNotEditable
-  - assertElementPresent
   - assertElementNotPresent
+  - assertElementPresent
   - assertEval
   - assertExpression
   - assertLocation
+  - assertNotChecked
+  - assertNotEditable
   - assertText
-  - assertTextPresent
   - assertTextNotPresent
+  - assertTextPresent
   - assertTitle
   - assertValue
   - captureEntirePageScreenshot
   - captureEntirePageScreenshotAndWait
+  - check
+  - checkAndWait
   - click
   - clickAndWait
-  - check
-  - uncheck
-  - storeChecked
-  - assertChecked
-  - assertNotChecked
-  - storeCookieByName
   - createCookie
+  - createCookieAndWait
   - deleteCookie
+  - deleteCookieAndWait
   - echo
+  - echoAndWait
   - fireEvent
+  - fireEventAndWait
   - getEval
+  - getEvalAndWait
   - goBack
   - goBackAndWait
+  - open
+  - openAndWait
+  - refresh
+  - refreshAndWait
   - select
+  - selectAndWait
   - selectFrame
   - selectFrameAndWait
   - sendKeys
+  - sendKeysAndWait
   - store
+  - storeChecked
+  - storeCookieByName
   - storeElementPresent
   - storeEval
   - storeText
   - type
-  - refreshAndWait
+  - typeAndWait
+  - uncheck
+  - uncheckAndWait
   - verifyAttribute
   - verifyEditable
-  - verifyNotEditable
-  - verifyElementPresent
   - verifyElementNotPresent
+  - verifyElementPresent
   - verifyLocation
+  - verifyNotEditable
   - verifyText
-  - verifyTextPresent
   - verifyTextNotPresent
+  - verifyTextPresent
   - verifyTitle
   - verifyValue
-  - waitForElementPresent
-  - waitForVisible
   - waitForElementNotPresent
+  - waitForElementPresent
   - waitForNotVisible
+  - waitForVisible
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).

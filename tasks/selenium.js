@@ -696,7 +696,9 @@ module.exports = function(grunt) {
         return ' '+options.join(' ');
       },
       wrapWithWaiting = function(key, fn){
-        if(!cmd[key + 'AndWait']) {
+        if(!cmd[key + 'AndWait'] &&
+           !key.match(/^(assert|verify|store|waitFor)/) &&
+           !key.match(/AndWait$/)) {
           cmd[key + 'AndWait'] = function(target, value, tap){
 
             var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.',''),
@@ -805,7 +807,7 @@ webdriver.prototype.hasNoElement = function(using, value, cb){
 
     isSuccess = true;
 
-    grunt.log.debug(supportedCmds.join('\n'));
+    grunt.log.debug('  - '+supportedCmds.join('\n  - '));
     grunt.log.debug('Setup Selenium Server...');
 
     child = spawn('java -jar ' + seleniumjar + getDriverOptions());
