@@ -33,24 +33,30 @@ ok 31 - phantomjs - assertValue [select] [1]
 ok 32 - phantomjs - assertValue [select] [2] 
 ok 33 - phantomjs - assertValue [select] [3] 
 ok 34 - phantomjs - assertValue [select] [1] 
-ok 35 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
-ok 36 - phantomjs - assertElementNotPresent [css=h1] [true] 
-ok 37 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
-ok 38 - phantomjs - assertElementNotPresent [css=h1] [true] 
-ok 39 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
-ok 40 - phantomjs - assertElementNotPresent [css=h1] [true] 
-ok 41 - phantomjs - assertExpression [${existsElement}] [true] 
-ok 42 - phantomjs - assertExpression [${notExistsElement}] [false] 
-ok 43 - phantomjs - assertExpression [${three}] [3] 
-ok 44 - phantomjs - assertExpression [${name}] [Sapphire] 
-ok 45 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
-ok 46 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
-not ok 47 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 35 - phantomjs - assertExpression [${isChecked}] [false] 
+ok 36 - phantomjs - assertNotChecked [checkbox] [true] 
+ok 37 - phantomjs - assertExpression [${isChecked}] [true] 
+ok 38 - phantomjs - assertChecked [checkbox] [true] 
+ok 39 - phantomjs - assertExpression [${isChecked}] [false] 
+ok 40 - phantomjs - assertNotChecked [checkbox] [true] 
+ok 41 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 42 - phantomjs - assertElementNotPresent [css=h1] [true] 
+ok 43 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 44 - phantomjs - assertElementNotPresent [css=h1] [true] 
+ok 45 - phantomjs - assertText [css=h1] [This is for selectFrame assertion] 
+ok 46 - phantomjs - assertElementNotPresent [css=h1] [true] 
+ok 47 - phantomjs - assertExpression [${existsElement}] [true] 
+ok 48 - phantomjs - assertExpression [${notExistsElement}] [false] 
+ok 49 - phantomjs - assertExpression [${three}] [3] 
+ok 50 - phantomjs - assertExpression [${name}] [Sapphire] 
+ok 51 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
+ok 52 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
+not ok 53 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
       [assertTitle] was failed 
         actual  :sideroad (sideroad) · GitHub
         expected:sideroad (sideroad) · GitHub - SUPERB!
 
-1..47
-# tests 47
-# pass 46
+1..53
+# tests 53
+# pass 52
 # fail 1

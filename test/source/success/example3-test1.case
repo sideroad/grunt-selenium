@@ -254,6 +254,61 @@
 	<td>1</td>
 </tr>
 <tr>
+	<td>storeChecked</td>
+	<td>checkbox</td>
+	<td>isChecked</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${isChecked}</td>
+	<td>false</td>
+</tr>
+<tr>
+	<td>assertNotChecked</td>
+	<td>checkbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>check</td>
+	<td>checkbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeChecked</td>
+	<td>checkbox</td>
+	<td>isChecked</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${isChecked}</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>assertChecked</td>
+	<td>checkbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>uncheck</td>
+	<td>checkbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeChecked</td>
+	<td>checkbox</td>
+	<td>isChecked</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${isChecked}</td>
+	<td>false</td>
+</tr>
+<tr>
+	<td>assertNotChecked</td>
+	<td>checkbox</td>
+	<td></td>
+</tr>
+<tr>
 	<td>selectFrame</td>
 	<td>id=child-iframe</td>
 	<td></td>

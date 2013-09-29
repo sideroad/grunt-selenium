@@ -403,6 +403,30 @@ module.exports = function(grunt) {
             assert.elementNotFound('uncheck', target, tap);
           });
         },
+        assertChecked: function(target, name, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return browser.isSelected(el);
+          }).then(function(isSelected){
+            assert.ok('assertChecked', isSelected, '['+target+']', tap );
+          }).fail(function(){
+            grunt.log.error('[wd]'+err);
+            assert.elementNotFound('assertChecked', target, tap);
+          });
+        },
+        assertNotChecked: function(target, name, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return browser.isSelected(el);
+          }).then(function(isSelected){
+            assert.ok('assertNotChecked', !isSelected, '['+target+']', tap );
+          }).fail(function(){
+            grunt.log.error('[wd]'+err);
+            assert.elementNotFound('assertNotChecked', target, tap);
+          });
+        },
         storeChecked: function(target, name, tap){
           return this.then(function(){
             return util.elementBy(target);
@@ -410,12 +434,11 @@ module.exports = function(grunt) {
             return browser.isSelected(el);
           }).then(function(isSelected){
             storedVars[name] = String( isSelected );
-            grunt.log.writeln('      storeChecked['+target+', '+name+']');
+            grunt.log.writeln('      storeChecked['+target+', '+name+', '+isSelected+']');
           }).fail(function(){
             grunt.log.error('[wd]'+err);
             assert.elementNotFound('storeChecked', target, tap);
           });
-          
         },
         storeCookieByName: function(cookieName, name){
           return this.then(function(){
@@ -915,7 +938,7 @@ webdriver.prototype.hasNoElement = function(using, value, cb){
           promise = browser.init({
             browserName: browserName,
             name: 'This is an example test',
-            proxy: options.proxy || {}
+            proxy: options.proxy || undefined
           });
           timeout = options.timeout;
           htmlpath = options.source;

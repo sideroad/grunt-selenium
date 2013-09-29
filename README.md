@@ -88,7 +88,7 @@ The path to save html source, when execute open command.
 
 #### options.proxy
 Type: [Proxy Object](https://code.google.com/p/selenium/wiki/JsonWireProtocol#Proxy_JSON_Object)
-Default value: {}
+Default value: `undefined`
 
 A JSON object describing a Proxy configuration
 
