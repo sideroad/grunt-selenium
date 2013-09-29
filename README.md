@@ -86,6 +86,12 @@ Default value: `undefined`
 
 The path to save html source, when execute open command.
 
+#### options.proxy
+Type: [Proxy Object](https://code.google.com/p/selenium/wiki/JsonWireProtocol#Proxy_JSON_Object)
+Default value: {}
+
+A JSON object describing a Proxy configuration
+
 ## Supported Selenium IDE commands
   - assertAlert
   - assertAttribute
@@ -105,6 +111,9 @@ The path to save html source, when execute open command.
   - captureEntirePageScreenshotAndWait
   - click
   - clickAndWait
+  - check
+  - uncheck
+  - storeChecked
   - storeCookieByName
   - createCookie
   - deleteCookie

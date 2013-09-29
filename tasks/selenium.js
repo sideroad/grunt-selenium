@@ -379,6 +379,44 @@ module.exports = function(grunt) {
             assert.elementNotFound('clickAndWait', target, tap);
           })
         },
+        check: function(target, msg, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            grunt.log.writeln('      check['+target+']');
+            return browser.execute( "arguments[0].setAttribute('checked', 'checked')", [{ELEMENT: el.value}] );
+          }).then(function(){
+          }).fail(function(){
+            grunt.log.error('[wd]'+err);
+            assert.elementNotFound('check', target, tap);
+          });
+        },
+        uncheck: function(target, msg, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            grunt.log.writeln('      uncheck['+target+']');
+            return browser.execute( "arguments[0].removeAttribute('checked')", [{ELEMENT: el.value}] );
+          }).then(function(){
+          }).fail(function(){
+            grunt.log.error('[wd]'+err);
+            assert.elementNotFound('uncheck', target, tap);
+          });
+        },
+        storeChecked: function(target, name, tap){
+          return this.then(function(){
+            return util.elementBy(target);
+          }).then(function(el){
+            return browser.isSelected(el);
+          }).then(function(isSelected){
+            storedVars[name] = String( isSelected );
+            grunt.log.writeln('      storeChecked['+target+', '+name+']');
+          }).fail(function(){
+            grunt.log.error('[wd]'+err);
+            assert.elementNotFound('storeChecked', target, tap);
+          });
+          
+        },
         storeCookieByName: function(cookieName, name){
           return this.then(function(){
             cookieName = util.restore(cookieName);
@@ -876,7 +914,8 @@ webdriver.prototype.hasNoElement = function(using, value, cb){
           browser = wd.promiseRemote();
           promise = browser.init({
             browserName: browserName,
-            name: 'This is an example test'
+            name: 'This is an example test',
+            proxy: options.proxy || {}
           });
           timeout = options.timeout;
           htmlpath = options.source;
