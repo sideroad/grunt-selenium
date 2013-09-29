@@ -114,6 +114,8 @@ A JSON object describing a Proxy configuration
   - check
   - uncheck
   - storeChecked
+  - assertChecked
+  - assertNotChecked
   - storeCookieByName
   - createCookie
   - deleteCookie
