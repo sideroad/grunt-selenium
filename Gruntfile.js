@@ -22,7 +22,7 @@ module.exports = function(grunt) {
       },
       success: {
         files: {
-         'test/actual/success.tap': ['test/source/success/example3.suite']
+         'test/actual/success.tap': ['test/source/success/*.suite']
         }
       },
       failed: {
