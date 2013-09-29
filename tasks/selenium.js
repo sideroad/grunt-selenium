@@ -567,6 +567,39 @@ module.exports = function(grunt) {
             assert.elementNotFound('selectFrame', target, tap);
           });
         },
+        selectFrameAndWait: function( target, options, tap ){
+          var token = 'wd_'+(+new Date())+'_'+(''+Math.random()).replace('.','');
+
+          return this.then(function(){
+            return browser.safeEval('window.'+token+'=true;');
+          }).then(function(){
+            return browser.frame();
+          }).then(function(){
+            var deferred = Q.defer(),
+                frame = util.restore(target),
+                sets = frame.split("="),
+                type = sets[0],
+                value = sets[1];
+
+            grunt.log.writeln('      selectFrame['+frame+']');
+
+            if(/^(index=0)|(relative=top)|(relative=parent)$/.test(frame)){
+              deferred.resolve(null);
+            } else if(type === 'id'){
+              browser.elementById(value, deferred.makeNodeResolver());
+            } else {
+              browser.execute(searchIframe, [type, value], deferred.makeNodeResolver());
+            }
+            return deferred.promise;
+          }).then(function(el){
+            return browser.frame(el);
+          }).then(function(){
+            return browser.waitForCondition('!window.'+token, timeout);
+          }).fail(function(err){
+            grunt.log.error('[wd]'+err);
+            assert.elementNotFound('selectFrame', target, tap);
+          });
+        },
         sendKeys: function( target, keys, tap ){
           var elem;
           return this.then(function(){

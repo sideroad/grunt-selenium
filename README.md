@@ -126,6 +126,7 @@ A JSON object describing a Proxy configuration
   - goBackAndWait
   - select
   - selectFrame
+  - selectFrameAndWait
   - sendKeys
   - store
   - storeElementPresent
