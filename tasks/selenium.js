@@ -869,7 +869,7 @@ webdriver.prototype.hasNoElement = function(using, value, cb){
                 $('a[href]').each(function(){
                   hrefs.push(this.href);
                 });
-                async.map( hrefs, function( href, callback ){
+                async.mapSeries( hrefs, function( href, callback ){
                   jsdom.env({
                     html: fs.readFileSync( href, 'utf8').toString(),
                     src: [jquery],
@@ -891,19 +891,22 @@ webdriver.prototype.hasNoElement = function(using, value, cb){
                             return this;
                           }
                         ).apply( promise, [ target, value, tap ] );
-                        promise.fail(function(err){
-                          var errs = err.cause.value.message.split("\n");
-                          grunt.log.error(errs[0]+'\n'+errs[1]+'\n'+errs[2]);
-                          callback(promise);
-                        });
                       });
                       promise = promise.then(function(){
                         grunt.log.writeln('    Finish  test case['+testcase+']');
-                        callback(promise);
-                      });
+                        callback(null, promise);
+                      }).fail(function(err){
+                          var errs = err.cause.value.message.split("\n");
+                          grunt.log.error(errs[0]+'\n'+errs[1]+'\n'+errs[2]);
+                          callback(err, promise);
+                      });;
                     }
                   });
-                }, function( err, results ){
+                }, function( err, result ){
+                  if(err){
+                    callback(err);
+                    return;
+                  }
                   promise = promise.then(function(){
                     storedVars = {};
                     grunt.log.writeln('  Finish suite['+suite+']');
