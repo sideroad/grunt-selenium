@@ -51,12 +51,15 @@ ok 49 - phantomjs - assertExpression [${three}] [3]
 ok 50 - phantomjs - assertExpression [${name}] [Sapphire] 
 ok 51 - phantomjs - assertLocation  [http://sideroad.github.io/grunt-selenium/] 
 ok 52 - phantomjs - assertTitle  [Grunt Selenium Test Page] 
-not ok 53 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
+ok 53 - phantomjs - assertExpression [${cookie}] [selenium] 
+ok 54 - phantomjs - verifyCookieByName [test, selenium] [selenium] 
+ok 55 - phantomjs - assertCookieByName [test, selenium] [selenium] 
+not ok 56 - phantomjs - assertTitle  [sideroad (sideroad) · GitHub] 
       [assertTitle] was failed 
         actual  :sideroad (sideroad) · GitHub
         expected:sideroad (sideroad) · GitHub - SUPERB!
 
-1..53
-# tests 53
-# pass 52
+1..56
+# tests 56
+# pass 55
 # fail 1

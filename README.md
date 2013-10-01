@@ -93,9 +93,10 @@ Default value: `undefined`
 A JSON object describing a Proxy configuration
 
 ## Supported Selenium IDE commands
-  - assertAlert
+   - assertAlert
   - assertAttribute
   - assertChecked
+  - assertCookieByName
   - assertEditable
   - assertElementNotPresent
   - assertElementPresent
@@ -148,6 +149,7 @@ A JSON object describing a Proxy configuration
   - uncheck
   - uncheckAndWait
   - verifyAttribute
+  - verifyCookieByName
   - verifyEditable
   - verifyElementNotPresent
   - verifyElementPresent

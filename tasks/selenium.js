@@ -379,28 +379,53 @@ module.exports = function(grunt) {
             grunt.log.writeln('      storeChecked['+target+', '+name+', '+isSelected+']');
           });
         },
+        assertCookieByName: function(cookieName, expected, tap){
+          return this.then(function(){
+            cookieName = util.restore(cookieName);
+            expected = util.restore(expected);
+            return browser.allCookies();
+          }).then(function(cookies){
+            var cookie = _(cookies).findWhere({name:cookieName}) || {};
+            assert.equal('assertCookieByName', cookie.value, expected, '['+cookieName+', '+expected+']', tap );
+          });
+        },
+        verifyCookieByName: function(cookieName, expected, tap){
+          return this.then(function(){
+            cookieName = util.restore(cookieName);
+            expected = util.restore(expected);
+            return browser.allCookies();
+          }).then(function(cookies){
+            var cookie = _(cookies).findWhere({name:cookieName}) || {};
+            assert.equal('verifyCookieByName', cookie.value, expected, '['+cookieName+', '+expected+']', tap );
+          });
+        },
         storeCookieByName: function(cookieName, name){
           return this.then(function(){
             cookieName = util.restore(cookieName);
             name = util.restore(name);
-            return browser.allCookie();
+            return browser.allCookies();
           }).then(function(cookies){
-            var cookie = _(cookies).where({name:cookieName}) || {};
+            var cookie = _(cookies).findWhere({name:cookieName}) || {};
+            console.log(cookie);
             storedVars[name] = cookie.value;
             grunt.log.writeln('      storeCookieByName['+cookieName+', '+name+']');
           });
         },
         createCookie: function( pair, options ){
           return this.then(function(){
-            var map = {},
+            var map,
                 keyset;
             pair = util.restore(pair);
-            options = util.restore(pair);
+            options = util.restore(options) || '{}';
             keyset = pair.split("=");
 
-            map[keyset[0]] = keyset[1];
+            map = {
+              name: keyset[0],
+              value: keyset[1]
+            };
             grunt.log.writeln('      createCookie['+pair+', '+options+']');            
-            return browser.setCookie(map, options);
+            _.extend(map, JSON.parse(options));
+            return browser.setCookie( map );
           }).then(function(){});
         },
         deleteCookie: function( name ){

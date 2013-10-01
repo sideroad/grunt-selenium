@@ -488,6 +488,31 @@
 	<td>toggled-target</td>
 	<td></td>
 </tr>
+<tr>
+	<td>createCookie</td>
+	<td>test=selenium</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeCookieByName</td>
+	<td>test</td>
+	<td>cookie</td>
+</tr>
+<tr>
+	<td>assertExpression</td>
+	<td>${cookie}</td>
+	<td>selenium</td>
+</tr>
+<tr>
+	<td>verifyCookieByName</td>
+	<td>test</td>
+	<td>selenium</td>
+</tr>
+<tr>
+	<td>assertCookieByName</td>
+	<td>test</td>
+	<td>selenium</td>
+</tr>
 </tbody></table>
 </body>
 </html>
