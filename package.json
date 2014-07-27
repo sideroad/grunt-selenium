@@ -35,7 +35,7 @@
     "mocha": "~1.8.1",
     "q": "0.9.x",
     "simple-spawn": "~0.0.2",
-    "wd": "~0.1.4"
+    "wd": "^0.3.4"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.1.1",

@@ -1,11 +1,11 @@
 TAP version 13
-not ok 1 - firefox - assertTitle  [ページ読み込みエラー] 
+not ok 1 - firefox - assertTitle  [sideroad (sideroad) · GitHub] 
       [assertTitle] was failed 
-        actual  :ページ読み込みエラー
+        actual  :sideroad (sideroad) · GitHub
         expected:sideroad (sideroad) · GitHub - SUPERB!
-not ok 2 - chrome - assertTitle  [http://github.com/sideroad/ に接続できません] 
+not ok 2 - chrome - assertTitle  [sideroad (sideroad) · GitHub] 
       [assertTitle] was failed 
-        actual  :http://github.com/sideroad/ に接続できません
+        actual  :sideroad (sideroad) · GitHub
         expected:sideroad (sideroad) · GitHub - SUPERB!
 
 1..2
